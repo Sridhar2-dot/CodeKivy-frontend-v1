@@ -329,7 +329,8 @@ const ChatWindow = () => {
         </div>
       )}
 
-      <div className="fixed bottom-24 right-6 z-50 w-[28rem] h-[75vh] 
+      <div className="fixed bottom-4 right-4 left-4 md:bottom-24 md:right-6 md:left-auto z-50 
+                      md:w-[28rem] h-[calc(100vh-2rem)] md:h-[75vh] 
                       bg-gradient-to-b from-gray-900 to-black rounded-2xl shadow-2xl 
                       flex flex-col border border-gray-800
                       transition-all duration-300 hover:shadow-gray-700/30">
@@ -343,7 +344,7 @@ const ChatWindow = () => {
               </div>
               <div>
                 <h3 className="font-bold text-white text-lg">KivyBot</h3>
-                <p className="text-xs text-gray-400 truncate w-48">
+                <p className="text-xs text-gray-400 truncate w-32 sm:w-48">
                   {uploadedDocument ? `📄 ${uploadedDocument.name}` : 'Python Assistant'}
                 </p>
               </div>
@@ -399,7 +400,7 @@ const ChatWindow = () => {
                 <img 
                   src={helloGif} 
                   alt="Hello" 
-                  className="w-48 h-48 mx-auto mb-4 opacity-70"
+                  className="w-32 h-32 sm:w-48 sm:h-48 mx-auto mb-4 opacity-70"
                 />
                 <p className="text-gray-500 text-sm">Start chatting to get help!</p>
               </div>
@@ -413,7 +414,7 @@ const ChatWindow = () => {
                 className={`flex mb-4 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div 
-                  className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm overflow-hidden ${
+                  className={`max-w-[85%] sm:max-w-[80%] px-4 py-3 rounded-2xl text-sm overflow-hidden ${
                     msg.sender === 'user'
                       ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-br-md shadow-lg shadow-orange-500/20 whitespace-pre-wrap'
                       : 'bg-gray-800 text-gray-100 rounded-bl-md border border-gray-700 bot-message'
@@ -483,7 +484,7 @@ const ChatWindow = () => {
                       ? "Ask about the document..." 
                       : "Ask me anything..."
               }
-              className={`flex-grow px-4 py-2.5 border rounded-xl
+              className={`flex-grow px-3 sm:px-4 py-2.5 border rounded-xl
                          text-sm outline-none bg-gray-800 text-white 
                          focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50
                          placeholder:text-gray-500 disabled:opacity-50 transition-all
