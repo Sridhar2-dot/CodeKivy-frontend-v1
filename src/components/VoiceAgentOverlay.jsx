@@ -41,6 +41,9 @@ export const VoiceAgentOverlay = ({ onClose }) => {
   const voiceSoundRef = useRef(null);
   const hasPlayedVoice = useRef(false);
 
+  // Environment variable for API URL
+  const API_URL = import.meta.env.VITE_API_URL || '';
+
   // Main voice processing function
   const handleVoiceStop = async (blobUrl, blob) => {
     console.log('🎤 Recording stopped, processing audio...');
@@ -54,7 +57,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
 
     try {
       console.log('📤 Sending audio to backend...');
-      const response = await fetch('/api/voice', {
+      const response = await fetch(`${API_URL}/api/voice`, {
         method: 'POST',
         body: formData,
       });
