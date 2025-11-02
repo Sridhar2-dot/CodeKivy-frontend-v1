@@ -46,7 +46,7 @@ const Hero = () => {
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
-            Transform your career with cutting-edge courses in AI, Web Development, and Data Science.
+            Transform your career with cutting-edge courses in Python, Machine Learning and AI.
             Learn from industry experts and build real-world projects.
           </p>
 
