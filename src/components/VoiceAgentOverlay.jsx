@@ -42,7 +42,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
   const hasPlayedVoice = useRef(false);
 
   // Environment variable for API URL
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  const API_URL = 'https://code-kivy-backend-v1.vercel.app';
 
   // Main voice processing function
   const handleVoiceStop = async (blobUrl, blob) => {

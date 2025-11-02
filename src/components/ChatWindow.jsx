@@ -38,7 +38,7 @@ const ChatWindow = () => {
   const inputRef = useRef(null);
 
   // Environment variable for API URL
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  const API_URL = 'https://code-kivy-backend-v1.vercel.app';
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
