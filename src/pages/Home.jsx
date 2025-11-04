@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // Import useState
-import { MessageCircle, Mic } from 'lucide-react'; 
+import { MessageCircle, Mic } from 'lucide-react';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import FeaturedCourses from '../components/FeaturedCourses';
@@ -13,17 +13,17 @@ function Home() {
 
   return (
     <div className="relative">
-      
+
       {/* 🚀 FLOATING ICONS CONTAINER */}
       <div className="fixed bottom-6 right-6 z-50 flex items-center space-x-4">
-        
+
         {/* Microphone Icon (MODIFIED) */}
         {/* 3. Changed from <a> to <button> */}
         <button
           onClick={() => setIsVoiceAgentOpen(true)} // 4. Set click handler
           className="p-4 rounded-full 
-                      bg-gray-800 hover:bg-gray-700 transition-colors 
-                      shadow-xl shadow-gray-800/30 ring-4 ring-gray-900"
+                        bg-gray-800 hover:bg-gray-700 transition-colors 
+                        shadow-xl shadow-gray-800/30 ring-4 ring-gray-900"
           aria-label="Open voice support"
         >
           <Mic className="h-6 w-6 text-white" strokeWidth={2.5} />
@@ -33,24 +33,27 @@ function Home() {
         <button
           onClick={() => setIsChatOpen(!isChatOpen)}
           className="p-4 rounded-full 
-                      bg-orange-500 hover:bg-orange-600 transition-colors 
-                      shadow-xl shadow-orange-500/30 ring-4 ring-gray-900"
+                        bg-orange-500 hover:bg-orange-600 transition-colors 
+                        shadow-xl shadow-orange-500/30 ring-4 ring-gray-900"
           aria-label="Open chat support"
         >
           <MessageCircle className="h-6 w-6 text-white" strokeWidth={2.5} />
         </button>
       </div>
 
-      {/* 5. Conditionally render both components */}
-      {isChatOpen && <ChatWindow />}
+      {/* 5. Conditionally render both components (FIXED) */}
+      {/* HERE IS THE FIX: 
+        We pass the `onClose` prop to ChatWindow, just like we do for VoiceAgentOverlay.
+      */}
+      {isChatOpen && <ChatWindow onClose={() => setIsChatOpen(false)} />}
       {isVoiceAgentOpen && <VoiceAgentOverlay onClose={() => setIsVoiceAgentOpen(false)} />}
-      
+
       {/* Page content (no change) */}
-      <Hero/>
+      <Hero />
       <FeaturedCourses />
       <Features />
       <HowItWorks />
-      
+
     </div>
   );
 }

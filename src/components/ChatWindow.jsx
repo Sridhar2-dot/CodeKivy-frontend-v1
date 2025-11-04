@@ -19,12 +19,12 @@ import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-sql';
 
 // Import the Hello GIF
-import helloGif from '../assets/Hello.webp';
+import helloGif from '../assets/Hello.gif';
 
-const ChatWindow = () => {
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'bot', text: "👋 Hello! I'm KivyBot. I can help you with:\n• Python questions\n• Code analysis\n• Document analysis (upload PDF, TXT, DOCX)\n• Screenshot analysis" },
-  ]);
+// 1. ADD `onClose` TO THE COMPONENT'S PROPS
+const ChatWindow = ({ onClose }) => {
+  // 2. REMOVED PRE-MESSAGE - STATE IS NOW AN EMPTY ARRAY
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isScreenshotActive, setIsScreenshotActive] = useState(false);
@@ -36,9 +36,14 @@ const ChatWindow = () => {
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
   const inputRef = useRef(null);
+  
+  // CREATE A REF FOR THE MESSAGES CONTAINER (FOR SCROLL FIX)
+  const messagesContainerRef = useRef(null);
 
-  // Environment variable for API URL
   const API_URL = 'https://code-kivy-backend-v1.vercel.app';
+
+  // // Environment variable for API URL
+  // const API_URL = 'http://127.0.0.1:8000'
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -60,8 +65,29 @@ const ChatWindow = () => {
     }
   }, [screenshotMode]);
 
-  // Check if chat is empty (only initial bot message)
-  const isChatEmpty = messages.length === 1;
+  // ADD SCROLL FIX EFFECT
+  // This stops the main page from scrolling when you scroll inside the chat window
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const stopWheelPropagation = (e) => {
+      // This stops the 'wheel' event from bubbling up to the main page
+      e.stopPropagation();
+    };
+
+    // We listen for 'wheel' events (mouse scroll)
+    container.addEventListener('wheel', stopWheelPropagation);
+
+    return () => {
+      // Clean up the event listener when the component unmounts
+      container.removeEventListener('wheel', stopWheelPropagation);
+    };
+  }, []); // The empty array [] means this runs only once on mount
+
+  // 3. UPDATED GIF VISIBILITY LOGIC
+  // Check if chat is empty
+  const isChatEmpty = messages.length === 0;
 
   const sendMessageToBackend = async (messageText, imageBase64 = null, documentData = null, modeOverride = null) => {
     setIsLoading(true);
@@ -349,15 +375,17 @@ const ChatWindow = () => {
                 </p>
               </div>
             </div>
-            {uploadedDocument && (
-              <button
-                onClick={clearDocument}
-                className="p-2 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors"
-                title="Clear document"
-              >
-                <X className="w-4 h-4 text-gray-400" />
-              </button>
-            )}
+            
+            {/* 4. MODIFIED CLOSE/CLEAR BUTTON */}
+            {/* This button is now always visible */}
+            <button
+              // Safely call onClose only if it exists
+              onClick={uploadedDocument ? clearDocument : () => onClose && onClose()}
+              className="p-2 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors"
+              title={uploadedDocument ? "Clear document & return to chat" : "Close chat window"}
+            >
+              <X className="w-4 h-4 text-gray-400" />
+            </button>
           </div>
         </div>
 
@@ -392,8 +420,12 @@ const ChatWindow = () => {
           </div>
         )}
 
-        {/* Messages */}
-        <div className="flex-grow p-4 overflow-y-auto custom-scrollbar relative">
+        {/* ADD THE REF TO THE MESSAGES CONTAINER */}
+        <div 
+          ref={messagesContainerRef} 
+          className="flex-grow p-4 overflow-y-auto custom-scrollbar relative"
+        >
+          {/* GIF is now correctly shown only when messages.length is 0 */}
           {isChatEmpty && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center">
@@ -407,6 +439,7 @@ const ChatWindow = () => {
             </div>
           )}
 
+          {/* Messages fade in when isChatEmpty becomes false */}
           <div className={isChatEmpty ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}>
             {messages.map((msg) => (
               <div 
@@ -452,8 +485,8 @@ const ChatWindow = () => {
               onClick={() => fileInputRef.current?.click()}
               disabled={isLoading || screenshotMode}
               className="p-2 bg-gray-800 hover:bg-gray-700 rounded-xl 
-                         transition-all shadow-lg active:scale-95 disabled:opacity-50
-                         border border-gray-700 hover:border-orange-500/50"
+                        transition-all shadow-lg active:scale-95 disabled:opacity-50
+                        border border-gray-700 hover:border-orange-500/50"
               title="Upload document (PDF, TXT, DOCX)"
             >
               <Upload className="h-4 w-4 text-orange-400" />
@@ -463,7 +496,7 @@ const ChatWindow = () => {
               onClick={handleCaptureScreenshot}
               disabled={isLoading || screenshotMode}
               className={`p-2 rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50
-                         border ${screenshotMode ? 'bg-orange-500/20 border-orange-500' : 'bg-gray-800 hover:bg-gray-700 border-gray-700 hover:border-orange-500/50'}`}
+                        border ${screenshotMode ? 'bg-orange-500/20 border-orange-500' : 'bg-gray-800 hover:bg-gray-700 border-gray-700 hover:border-orange-500/50'}`}
               title="Capture screenshot"
             >
               <Camera className={`h-4 w-4 ${screenshotMode ? 'text-orange-400' : 'text-orange-400'}`} />
@@ -485,10 +518,10 @@ const ChatWindow = () => {
                       : "Ask me anything..."
               }
               className={`flex-grow px-3 sm:px-4 py-2.5 border rounded-xl
-                         text-sm outline-none bg-gray-800 text-white 
-                         focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50
-                         placeholder:text-gray-500 disabled:opacity-50 transition-all
-                         ${screenshotMode ? 'border-orange-500/50' : 'border-gray-700'}`}
+                        text-sm outline-none bg-gray-800 text-white 
+                        focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50
+                        placeholder:text-gray-500 disabled:opacity-50 transition-all
+                        ${screenshotMode ? 'border-orange-500/50' : 'border-gray-700'}`}
               disabled={isLoading}
             />
 
@@ -496,9 +529,9 @@ const ChatWindow = () => {
               onClick={handleSend}
               disabled={isLoading || input.trim() === ''}
               className="p-2.5 bg-gradient-to-br from-orange-500 to-orange-600 
-                         hover:from-orange-600 hover:to-orange-700 rounded-xl 
-                         transition-all shadow-lg shadow-orange-500/20 active:scale-95 
-                         disabled:opacity-50 disabled:from-gray-700 disabled:to-gray-700"
+                        hover:from-orange-600 hover:to-orange-700 rounded-xl 
+                        transition-all shadow-lg shadow-orange-500/20 active:scale-95 
+                        disabled:opacity-50 disabled:from-gray-700 disabled:to-gray-700"
               title="Send message"
             >
               <Send className="h-4 w-4 text-white" />

@@ -55,3 +55,19 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 .animate-ping-slow {
   animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+
+/* Add this to your index.css file */
+
+.embla {
+  overflow: hidden;
+  position: relative;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 100%; /* This makes each slide take 100% of the container width */
+  min-width: 0;
+  position: relative;
+}

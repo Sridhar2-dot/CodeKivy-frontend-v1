@@ -1,25 +1,121 @@
-import React, { useState, useEffect } from 'react';
-import { MapPin, Users, GraduationCap, BookOpen, TrendingUp, Award, Target, Sparkles, BadgeCheck } from 'lucide-react';
-// Import your map images
+import React, { useState, useEffect, useRef } from 'react'; // Added useRef
+import { 
+  MapPin, Users, GraduationCap, BookOpen, TrendingUp, Award, Target, Sparkles, 
+  BadgeCheck, Calendar, ChevronLeft, ChevronRight, Star, 
+  Play, Volume2, VolumeX // Added Play, Volume2, VolumeX
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion'; // Added motion, AnimatePresence
 import image1 from '../assets/AP.png';
 import image2 from '../assets/KN.png';
 import image3 from '../assets/TG1.png';
 import image4 from '../assets/TM.png';
 import msmeImage from '../assets/MSME.png';
 
+// --- IMPORT YOUR VIDEO HERE ---
+// Make sure this path is correct
+import aboutvideo from '../assets/aboutvideo.mp4'; 
+
+// --- Helper component for Star Ratings ---
+const StarRating = ({ rating }) => {
+  return (
+    <div className="flex gap-0.5">
+      {[...Array(5)].map((_, i) => (
+        <Star
+          key={i}
+          className={`w-4 h-4 ${i < Math.floor(rating) ? 'text-yellow-400' : 'text-gray-600'}`}
+          fill={i < Math.floor(rating) ? 'currentColor' : 'none'}
+        />
+      ))}
+    </div>
+  );
+};
+
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [counters, setCounters] = useState({
     students: 0,
     institutes: 0,
     states: 0
   });
 
+  // --- Video Player State and Refs ---
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // 1. ADDED MUTE STATE, starts true
+  const videoRef = useRef(null);
+  const videoContainerRef = useRef(null); // Ref for the video section
+
+  // Events data with placeholder images
+  const events = [
+    {
+      title: 'Python Workshop 2024',
+      college: 'IIT Hyderabad',
+      date: 'March 15, 2024',
+      attendees: '200+',
+      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop',
+      description: 'Advanced Python programming workshop'
+    },
+    {
+      title: 'AI/ML Bootcamp',
+      college: 'VIT Vellore',
+      date: 'April 22, 2024',
+      attendees: '150+',
+      image: 'https://images.unsplash.com/photo-1591453089816-0fbb971b454c?w=800&h=500&fit=crop',
+      description: 'Machine Learning fundamentals and applications'
+    },
+    {
+      title: 'Web Development Summit',
+      college: 'BITS Pilani Hyderabad',
+      date: 'May 10, 2024',
+      attendees: '180+',
+      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=500&fit=crop',
+      description: 'Full-stack development with Python and React'
+    },
+    {
+      title: 'Data Science Conference',
+      college: 'NIT Trichy',
+      date: 'June 5, 2024',
+      attendees: '220+',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop',
+      description: 'Data analytics and visualization techniques'
+    },
+    {
+      title: 'Hackathon 2024',
+      college: 'IIIT Bangalore',
+      date: 'July 18, 2024',
+      attendees: '300+',
+      image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=500&fit=crop',
+      description: '24-hour coding challenge with prizes'
+    }
+  ];
+
+  // --- Student Feedback Data ---
+  const studentFeedback = [
+    { name: 'Alex M.', rating: 5, review: 'Amazing course! The project-based learning is top-notch.' },
+    { name: 'Sarah J.', rating: 4, review: 'Learned so much. The KiwiBot assistant was surprisingly helpful.' },
+    { name: 'Rohan P.', rating: 5, review: 'Great career support. I landed an internship right after.' },
+    { name: 'Priya K.', rating: 5, review: 'Highly recommend Code Kivy for anyone serious about Python.' },
+    { name: 'Michael B.', rating: 4, review: 'Challenging but very rewarding. The instructors are great.' },
+    { name: 'Aisha S.', rating: 5, review: 'Best Python course I\'ve ever taken. Clear, concise, and practical.' },
+    { name: 'David L.', rating: 5, review: 'The AI/ML modules were fantastic and very up-to-date.' },
+  ];
+
+  // Duplicate feedback for seamless loop
+  const duplicatedFeedback = [...studentFeedback, ...studentFeedback];
+
+  // Auto-advance carousel
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentEventIndex((prev) => (prev + 1) % events.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [events.length]);
+
   // Animate counters on mount
   useEffect(() => {
     setIsVisible(true);
     
-    const duration = 2000; // 2 seconds
+    const duration = 2000;
     const steps = 60;
     const increment = {
       students: 800 / steps,
@@ -43,6 +139,62 @@ const About = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  // --- MODIFIED: Video Player Intersection Observer ---
+  // This effect creates the "play/pause on scroll" behavior
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    const containerElement = videoContainerRef.current;
+    if (!videoElement || !containerElement) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsPlaying(true);
+        } else {
+          setIsPlaying(false);
+          setIsMuted(true); // 2. Re-mute when scrolling away
+        }
+      },
+      {
+        threshold: 0.5, // 50% visibility
+      }
+    );
+
+    observer.observe(containerElement);
+
+    return () => {
+      if (containerElement) {
+        observer.unobserve(containerElement);
+      }
+    };
+  }, []);
+
+  // --- MODIFIED: Video Player State Sync ---
+  // This effect syncs the `isPlaying` state
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    if (isPlaying) {
+      videoElement.play().catch((error) => {
+        // Autoplay was prevented
+        console.warn('Video autoplay was prevented:', error);
+        setIsPlaying(false);
+        setIsMuted(true);
+      });
+    } else {
+      videoElement.pause();
+    }
+  }, [isPlaying]);
+
+  // 3. NEW: This effect syncs the `isMuted` state
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+    videoElement.muted = isMuted;
+  }, [isMuted]);
+
 
   const stats = [
     {
@@ -101,33 +253,50 @@ const About = () => {
     }
   ];
 
+  const nextEvent = () => {
+    setCurrentEventIndex((prev) => (prev + 1) % events.length);
+  };
+
+  const prevEvent = () => {
+    setCurrentEventIndex((prev) => (prev - 1 + events.length) % events.length);
+  };
+
+  // 4. MODIFIED: Video play/pause toggle handler
+  const togglePlay = () => {
+    setIsPlaying((prev) => !prev);
+    // When user clicks the big play button, always unmute
+    if (!isPlaying) {
+      setIsMuted(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       
       {/* Hero Section */}
       <section className="relative pt-20 pb-20 px-6">
         <div className="max-w-7xl mx-auto">
-          {/* Animated background elements */}
           <div className="absolute top-20 left-10 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
 
           <div className={`relative text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 rounded-full px-6 py-2 mb-6">
+            <div className="relative inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 rounded-full px-6 py-2 mb-6 overflow-hidden">
               <Sparkles className="w-4 h-4 text-orange-400" />
               <span className="text-sm font-medium text-orange-300">Leading EdTech Platform</span>
+              <div className="absolute inset-0 -translate-x-full animate-[shimmer_3s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent animate-[fadeInUp_1s_ease-out]">
               About Code Kivy
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed">
+            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed animate-[fadeInUp_1s_ease-out_0.2s_both]">
               Empowering the next generation of developers with 
               <span className="text-orange-500 font-semibold"> Python excellence</span> across South India
             </p>
           </div>
 
-          {/* Stats Grid */}
+          {/* Stats Grid with enhanced animations */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
             {stats.map((stat, index) => (
               <div 
@@ -135,8 +304,9 @@ const About = () => {
                 className={`relative group transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="bg-gradient-to-br from-gray-900 to-black border-2 border-gray-800 rounded-2xl p-6 hover:border-orange-500/50 transition-all duration-300 hover:scale-105">
-                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${stat.color} mb-4`}>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-orange-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative bg-gradient-to-br from-gray-900 to-black border-2 border-gray-800 rounded-2xl p-6 hover:border-orange-500/50 transition-all duration-300 hover:scale-105 hover:-translate-y-2">
+                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${stat.color} mb-4 transform group-hover:rotate-6 transition-transform duration-300`}>
                     {stat.icon}
                   </div>
                   <div className="text-3xl md:text-4xl font-bold text-white mb-2">
@@ -152,19 +322,17 @@ const About = () => {
         </div>
       </section>
 
-      {/* MSME Certification Section - Reduced Size */}
-      <section className="py-12 px-6 bg-gradient-to-b from-black to-gray-900">
+      {/* MSME Certification Section */}
+      <section className="py-12 px-6 bg-black">
         <div className="max-w-5xl mx-auto">
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border-2 border-orange-500/30 rounded-2xl p-6 md:p-8 relative overflow-hidden">
-              {/* Background decoration */}
-              <div className="absolute top-0 right-0 w-48 h-48 bg-orange-500/5 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-600/5 rounded-full blur-3xl"></div>
+          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+            <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border-2 border-orange-500/30 rounded-2xl p-6 md:p-8 relative overflow-hidden hover:border-orange-500/60 transition-all duration-500 group">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-orange-500/5 rounded-full blur-3xl group-hover:bg-orange-500/10 transition-all duration-500"></div>
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-600/5 rounded-full blur-3xl group-hover:bg-orange-600/10 transition-all duration-500"></div>
               
               <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
-                {/* Left side - Badge Icon and Text */}
                 <div className="flex-1 text-center md:text-left">
-                  <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1.5 mb-3">
+                  <div className="inline-flex items-center gap-2 bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1.5 mb-3 animate-[pulse_2s_ease-in-out_infinite]">
                     <BadgeCheck className="w-4 h-4 text-green-400" />
                     <span className="text-xs font-medium text-green-300">Officially Recognized</span>
                   </div>
@@ -180,33 +348,29 @@ const About = () => {
                   </p>
 
                   <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                    <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5">
+                    <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5 hover:border-green-500/50 transition-all duration-300">
                       <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
                       <span className="text-xs text-gray-300">Government Approved</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5">
+                    <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5 hover:border-orange-500/50 transition-all duration-300">
                       <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
                       <span className="text-xs text-gray-300">Quality Assured</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5">
+                    <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-lg px-3 py-1.5 hover:border-blue-500/50 transition-all duration-300">
                       <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
                       <span className="text-xs text-gray-300">Trusted Partner</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Right side - MSME Certificate Image */}
                 <div className="flex-shrink-0">
                   <div className="relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-500"></div>
-                    <div className="relative bg-white rounded-xl p-3 shadow-2xl">
+                    <div className="relative bg-white rounded-xl p-3 shadow-2xl transform group-hover:scale-105 transition-transform duration-300">
                       <img 
                         src={msmeImage} 
                         alt="MSME Certification" 
                         className="w-48 h-48 object-contain rounded-lg"
-                        onError={(e) => {
-                          e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="192" height="192"%3E%3Crect fill="%23f5f5f5" width="192" height="192"/%3E%3Ctext fill="%23ea580c" font-size="14" font-family="Arial" x="50%25" y="45%25" text-anchor="middle" dominant-baseline="middle"%3EMSME%3C/text%3E%3Ctext fill="%23666" font-size="12" font-family="Arial" x="50%25" y="55%25" text-anchor="middle" dominant-baseline="middle"%3ECertification%3C/text%3E%3C/svg%3E';
-                        }}
                       />
                     </div>
                   </div>
@@ -218,31 +382,32 @@ const About = () => {
       </section>
 
       {/* Mission Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-20 px-6 bg-black">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white animate-[fadeInUp_1s_ease-out]">
               Our Mission
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto animate-[fadeInUp_1s_ease-out_0.2s_both]">
               To democratize quality programming education and create a thriving community 
               of Python developers across South India
             </p>
           </div>
 
-          {/* Features Grid */}
           <div className="grid md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
               <div 
                 key={index}
-                className="bg-black border-2 border-gray-800 rounded-2xl p-8 hover:border-orange-500/50 transition-all duration-300 group"
+                className="bg-black border-2 border-gray-800 rounded-2xl p-8 hover:border-orange-500/50 transition-all duration-300 group hover:scale-105 hover:-translate-y-2 animate-[fadeInUp_0.8s_ease-out] relative overflow-hidden"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-orange-500/20 rounded-xl text-orange-400 group-hover:bg-orange-500/30 transition-colors">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative flex items-start gap-4">
+                  <div className="p-3 bg-orange-500/20 rounded-xl text-orange-400 group-hover:bg-orange-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                     {feature.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-400 transition-colors duration-300">
                       {feature.title}
                     </h3>
                     <p className="text-gray-400">
@@ -256,23 +421,168 @@ const About = () => {
         </div>
       </section>
 
+      {/* Events Carousel Section */}
+      <section className="py-20 px-6 bg-black relative overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2 mb-4">
+              <Calendar className="w-4 h-4 text-purple-400" />
+              <span className="text-sm font-medium text-purple-300">Past Events</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              Our Events
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Bringing tech education to campuses across South India
+            </p>
+          </div>
+
+          {/* Carousel Container */}
+          <div className="relative max-w-6xl mx-auto">
+            {/* Main Carousel */}
+            <div className="relative h-[500px] rounded-3xl overflow-hidden">
+              {events.map((event, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+                    index === currentEventIndex
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-95 pointer-events-none'
+                  }`}
+                >
+                  <div className="relative h-full rounded-3xl overflow-hidden group">
+                    {/* Event Image */}
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    />
+                    
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                    
+                    {/* Event Content */}
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
+                      {/* Event Details Badge */}
+                      <div className="flex flex-wrap gap-3 mb-6">
+                        <div className="flex items-center gap-2 bg-orange-500/20 backdrop-blur-md border border-orange-500/30 rounded-full px-4 py-2">
+                          <Calendar className="w-4 h-4 text-orange-400" />
+                          <span className="text-sm text-orange-300 font-medium">{event.date}</span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-purple-500/20 backdrop-blur-md border border-purple-500/30 rounded-full px-4 py-2">
+                          <Users className="w-4 h-4 text-purple-400" />
+                          <span className="text-sm text-purple-300 font-medium">{event.attendees} Attendees</span>
+                        </div>
+                      </div>
+
+                      {/* Event Title & Description */}
+                      <h3 className="text-3xl md:text-5xl font-bold text-white mb-3">
+                        {event.title}
+                      </h3>
+                      <p className="text-lg text-gray-300 mb-6 max-w-2xl">
+                        {event.description}
+                      </p>
+
+                      {/* College Name Highlight */}
+                      <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full px-6 py-3 w-fit">
+                        <MapPin className="w-5 h-5 text-white" />
+                        <span className="text-white font-bold text-lg">{event.college}</span>
+                      </div>
+                    </div>
+
+                    {/* Decorative Corner Elements */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-500/30 to-transparent rounded-bl-full"></div>
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/30 to-transparent rounded-tr-full"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Navigation Buttons */}
+            <button
+              onClick={prevEvent}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 rounded-full p-3 transition-all duration-300 hover:scale-110 z-20"
+            >
+              <ChevronLeft className="w-6 h-6 text-white" />
+            </button>
+            <button
+              onClick={nextEvent}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 rounded-full p-3 transition-all duration-300 hover:scale-110 z-20"
+            >
+              <ChevronRight className="w-6 h-6 text-white" />
+            </button>
+
+            {/* Carousel Indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              {events.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentEventIndex(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    index === currentEventIndex
+                      ? 'w-12 bg-orange-500'
+                      : 'w-3 bg-gray-600 hover:bg-gray-500'
+                  } h-3`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Student Feedback Section --- */}
+      <section className="py-16 bg-black text-white">
+        <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+            What Our Students Say
+          </h2>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Feedback from the talented developers in our community.
+          </p>
+        </div>
+        <div
+          className="relative w-full overflow-hidden"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)'
+          }}
+        >
+          <div className="flex w-max animate-marquee">
+            {duplicatedFeedback.map((item, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-80 mx-4 bg-gradient-to-br from-gray-900 to-black border-2 border-gray-800 rounded-2xl p-6 shadow-lg"
+              >
+                <div className="flex items-center mb-4">
+                  <StarRating rating={item.rating} />
+                  <span className="ml-2 text-sm font-medium text-gray-300">{item.rating.toFixed(1)}</span>
+                </div>
+                <p className="text-gray-300 mb-4 text-base">&ldquo;{item.review}&rdquo;</p>
+                <p className="text-white font-semibold text-right">- {item.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
       {/* Geographic Reach Section */}
       <section className="py-20 px-6 bg-black">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white animate-[fadeInUp_1s_ease-out]">
               Our Geographic Reach
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8 animate-[fadeInUp_1s_ease-out_0.2s_both]">
               Serving students across 4 major states in South India
             </p>
             
-            {/* States Pills */}
             <div className="flex flex-wrap justify-center gap-4 mb-16">
               {states.map((state, index) => (
                 <div 
                   key={index}
-                  className="flex items-center gap-2 bg-gray-900 border border-orange-500/30 rounded-full px-6 py-3 hover:border-orange-500 transition-all duration-300 hover:scale-105"
+                  className="flex items-center gap-2 bg-gray-900 border border-orange-500/30 rounded-full px-6 py-3 hover:border-orange-500 hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-[fadeInUp_0.8s_ease-out]"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className={`w-3 h-3 ${state.color} rounded-full animate-pulse`}></div>
@@ -282,9 +592,7 @@ const About = () => {
             </div>
           </div>
 
-          {/* Map Display with Animated Icon */}
           <div className="relative max-w-5xl mx-auto">
-            {/* Animated Map Pin Icon */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
               <div className="animate-bounce">
                 <div className="relative">
@@ -294,35 +602,34 @@ const About = () => {
               </div>
             </div>
 
-            {/* Map Images Grid */}
             <div className="grid grid-cols-2 gap-4">
               {[image1, image2, image3, image4].map((image, index) => (
                 <div 
                   key={index}
-                  className="relative group overflow-hidden rounded-2xl border-2 border-gray-800 hover:border-orange-500/50 transition-all duration-300"
+                  className="relative group overflow-hidden rounded-2xl border-2 border-gray-800 hover:border-orange-500/50 transition-all duration-300 hover:scale-105 animate-[fadeInUp_0.8s_ease-out]"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <img 
                     src={image} 
                     alt={`Map of region ${index + 1}`}
                     className="w-full h-64 object-contain transform group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23111" width="400" height="300"/%3E%3Ctext fill="%23ea580c" font-size="20" font-family="Arial" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3EMap Image ' + (index + 1) + '%3C/text%3E%3C/svg%3E';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
               ))}
             </div>
 
-            {/* Decorative elements */}
             <div className="absolute -top-10 -left-10 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl"></div>
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-600/20 rounded-full blur-3xl"></div>
           </div>
         </div>
       </section>
 
-      {/* Video Section Placeholder */}
-      <section className="py-20 px-6 bg-gradient-to-b from-black to-gray-900">
+      {/* --- MODIFIED: Video Section --- */}
+      <section 
+        className="py-20 px-6 bg-black" 
+        ref={videoContainerRef} // Attach ref for IntersectionObserver
+      >
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
@@ -333,39 +640,117 @@ const About = () => {
             </p>
           </div>
 
-          {/* Video Placeholder */}
-          <div className="relative rounded-2xl overflow-hidden border-4 border-orange-500/30 aspect-video bg-gradient-to-br from-gray-900 to-black">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="inline-flex p-6 bg-orange-500/20 rounded-full mb-4">
-                  <svg className="w-16 h-16 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </div>
-                <p className="text-gray-400 text-lg">Video Coming Soon</p>
-              </div>
-            </div>
+          <div className="relative rounded-2xl overflow-hidden border-4 border-orange-500/30 aspect-video bg-gradient-to-br from-gray-900 to-black hover:border-orange-500/60 transition-all duration-500 group">
+            
+            {/* The Video Element */}
+            <video
+              ref={videoRef}
+              src={aboutvideo}
+              // `muted` prop is now controlled by state via useEffect
+              loop
+              playsInline
+              controls={false} // Hide default controls
+              className="absolute inset-0 w-full h-full object-cover z-0"
+            />
+
+            {/* Animated Play Button Overlay */}
+            <AnimatePresence>
+              {!isPlaying && (
+                <motion.div
+                  className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 cursor-pointer"
+                  onClick={togglePlay} // Click to play/pause
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="text-center">
+                    <div className="inline-flex p-6 bg-orange-500/20 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <Play
+                        className="w-16 h-16 text-orange-500"
+                        fill="currentColor"
+                        strokeWidth={0}
+                      />
+                    </div>
+                    <p className="text-gray-200 text-lg font-semibold">
+                      Click to Play
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* 5. NEW: Mute/Unmute Button */}
+            <AnimatePresence>
+              {isPlaying && (
+                <motion.button
+                  onClick={() => setIsMuted((prev) => !prev)}
+                  className="absolute z-20 bottom-4 right-4 bg-black/30 backdrop-blur-md text-white p-2 rounded-full transition-all hover:bg-black/50"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  title={isMuted ? 'Unmute' : 'Mute'}
+                >
+                  {isMuted ? (
+                    <VolumeX className="w-5 h-5" />
+                  ) : (
+                    <Volume2 className="w-5 h-5" />
+                  )}
+                </motion.button>
+              )}
+            </AnimatePresence>
+
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* --- Meet Our Founder Section --- */}
       <section className="py-20 px-6 bg-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            Join Our Growing Community
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-white">
+            Meet Our Founder & CEO
           </h2>
-          <p className="text-xl text-gray-400 mb-8">
-            Be part of South India's largest Python learning platform
+          <div className="relative inline-block">
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-orange-500 to-purple-500 rounded-full blur-xl opacity-75 animate-pulse"></div>
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80"
+              alt="Pavan Nekkanti, Founder & CEO"
+              className="relative w-40 h-40 rounded-full mx-auto object-cover border-4 border-gray-800"
+            />
+          </div>
+          <h3 className="text-3xl font-bold text-white mt-6 mb-2">
+            Pavan Nekkanti
+          </h3>
+          <p className="text-xl text-orange-400 font-semibold">
+            AI Engineer @NYX
           </p>
-          <button className="bg-gradient-to-r from-orange-600 to-orange-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-orange-500 hover:to-orange-400 transition-all duration-300 hover:scale-105 shadow-xl shadow-orange-500/30">
-            Start Learning Today
-          </button>
         </div>
       </section>
 
+
+
       {/* Custom Animations */}
       <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(200%);
+          }
+        }
+        
         @keyframes bounce {
           0%, 100% {
             transform: translateY(0);
@@ -377,6 +762,20 @@ const About = () => {
         
         .animate-bounce {
           animation: bounce 2s ease-in-out infinite;
+        }
+
+        {/* --- NEW: Marquee Animation --- */}
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
         }
       `}</style>
     </div>
