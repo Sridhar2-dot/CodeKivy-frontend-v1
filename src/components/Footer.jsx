@@ -52,7 +52,6 @@ const Footer = () => {
             <div className="flex items-center gap-4">
               {[
                 { icon: Github, href: '#', name: 'GitHub', color: 'from-gray-600 to-gray-700' },
-                { icon: Twitter, href: '#', name: 'Twitter', color: 'from-blue-500 to-blue-600' },
                 { icon: Linkedin, href: '#', name: 'LinkedIn', color: 'from-blue-600 to-blue-700' },
               ].map((social, index) => {
                 const Icon = social.icon;
