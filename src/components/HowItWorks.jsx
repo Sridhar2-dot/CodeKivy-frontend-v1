@@ -15,7 +15,7 @@ const steps = [
   {
     id: 2,
     name: 'Learn By Doing',
-    description: 'Watch lessons, complete projects, and get instant feedback.',
+    description: 'Attend classes, complete assignments and projects, and get instant feedback.',
     icon: PlayCircle,
     color: 'from-orange-400 to-orange-600',
     glow: 'shadow-orange-500/50',
