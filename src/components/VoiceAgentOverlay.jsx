@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Mic, Square, Loader2 } from 'lucide-react'; // Mic and Square are no longer used but kept to avoid breaking anything
+// 1. Mic and Square are now both used
+import { X, Mic, Square, Loader2 } from 'lucide-react'; 
 import { useReactMediaRecorder } from 'react-media-recorder';
 
 import animation from '../assets/animation.mp4'
 import voiceSound from '../assets/Voice.mp3';
-import blob from '../assets/Blob.gif' // This is now the main button graphic
+import blob from '../assets/Blob.gif' // This is the main button graphic
 
 // Helper to decode Base64 audio
 const b64toBlob = (b64Data, contentType = 'audio/wav', sliceSize = 512) => {
@@ -41,10 +42,10 @@ export const VoiceAgentOverlay = ({ onClose }) => {
   const hasPlayedVoice = useRef(false);
 
   // Environment variable for API URL
-  const API_URL = 'https://code-kivy-backend-v1.vercel.app';
+  // const API_URL = 'https://code-kivy-backend-v1.vercel.app';
 
     // Environment variable for API URL
-  // const API_URL = 'http://127.0.0.1:8000'
+  const API_URL = 'https://code-kivy-backend-v1.vercel.app';
 
   // Main voice processing function
   const handleVoiceStop = async (blobUrl, blob) => {
@@ -179,8 +180,8 @@ export const VoiceAgentOverlay = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div className="bg-gradient-to-b from-gray-900/95 to-black/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md p-8 flex flex-col items-center gap-4 relative border border-gray-800/50">
+    <div className="fixed inset-0 bg-black backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+      <div className="bg-black backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md p-8 flex flex-col items-center gap-4 relative border border-gray-700/50">
         
         {/* Close Button */}
         <button
@@ -212,7 +213,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
                     }
                   }
                 }}
-                className="w-full h-auto object-contain drop-shadow-2xl rounded-xl"
+                className="w-60 h-auto object-contain drop-shadow-2xl rounded-xl"
               />
             </div>
           )}
@@ -263,11 +264,21 @@ export const VoiceAgentOverlay = ({ onClose }) => {
               ) : isBotSpeaking ? (
                 <Loader2 size={36} className="text-white animate-spin" />
               ) : isRecording ? (
-                <img 
-                  src={blob} 
-                  alt="Stop recording" 
-                  className="w-full h-full object-cover" // Fills the new w-32 h-32
-                />
+                // 2. MODIFIED: Added a wrapper and an overlay for the stop button
+                <>
+                  <img 
+                    src={blob} 
+                    alt="Recording animation" 
+                    className="w-full h-full object-cover" // Fills the new w-32 h-32
+                  />
+                  {/* This is the new "Stop" button visual */}
+                  <div 
+                    className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-xs"
+                    aria-hidden="true" // It's just a visual cue, parent button handles click
+                  >
+                    <Square size={32} className="text-white" fill="white" />
+                  </div>
+                </>
               ) : (
                 <Mic size={32} className="text-white" />
               )}
