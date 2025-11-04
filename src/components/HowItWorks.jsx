@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, PlayCircle, GraduationCap, ArrowRight, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom'; // 1. Make sure to import Link
 
 const steps = [
   {
@@ -184,13 +185,16 @@ const HowItWorks = () => {
 
         {/* Bottom CTA */}
         <div className="mt-20 text-center animate-[fadeIn_1s_ease-out_1.4s_both]">
-          <button className="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105">
+<Link
+            to="/courses"
+            className="group relative inline-block px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105" // 3. Added 'inline-block'
+          >
             <span className="relative z-10 flex items-center gap-2">
               Start Your Journey
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </span>
             <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </button>
+          </Link>
         </div>
       </div>
 
