@@ -5,6 +5,12 @@ import course2 from '../assets/Generated Image November 05, 2025 - 1_48AM.png'
 import course3 from '../assets/Generated Image November 05, 2025 - 1_50AM.png'
 import { Link } from 'react-router-dom';
 
+// ----- ADDED IMPORTS -----
+import pythonBasicPdf from '../assets/PythonBasic.pdf';
+import pythonAdvancePdf from '../assets/PythonAdvance.pdf';
+import mlInternPdf from '../assets/ML-intern.pdf';
+// -------------------------
+
 const Courses = () => {
   const [visibleCourses, setVisibleCourses] = useState([]);
   const [hoveredCourse, setHoveredCourse] = useState(null);
@@ -21,7 +27,7 @@ const Courses = () => {
       level: 'Beginner',
       students: '200+',
       about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions. Perfect for school students starting their coding journey.',
-      pdfUrl: '/pdfs/python-basics.pdf',
+      pdfUrl: pythonBasicPdf, // <-- CHANGED
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdMIr3sUbDapsx7FWP6f147prEefoU55VAWmWNh4wQ_baBeow/viewform'
     },
     {
@@ -34,7 +40,7 @@ const Courses = () => {
       level: 'Beginner',
       students: '500+',
       about: 'Master Python programming Completely. Learn variables, data types, loops, functions and OOPs concepts. Perfect for beginners starting their coding journey.',
-      pdfUrl: '/pdfs/advanced-python.pdf',
+      pdfUrl: pythonAdvancePdf, // <-- CHANGED
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScEiwTe9NLWH0FaVE5--sz6qP_BXMQfg2g7aLDq91ClCQsT6Q/viewform'
     },
     {
@@ -47,7 +53,7 @@ const Courses = () => {
       level: 'Advanced',
       students: '120+',
       about: 'Become a Machine Learning expert. Learn algorithms, neural networks, deep learning, and AI applications. Work on real industry projects and build your ML portfolio.',
-      pdfUrl: '/pdfs/machine-learning.pdf',
+      pdfUrl: mlInternPdf, // <-- CHANGED
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdXTXnMbHC1vXqFSYIn0gSBlX3jx-R9kr8rZqiYTv8CAOfstA/viewform'
     }
   ];
@@ -315,7 +321,7 @@ const Courses = () => {
               800+ students trusted Code Kivy to master Python and AI unlock your potential today.
             </p>
             
-           
+            
           </div>
         </section>
       </div>
