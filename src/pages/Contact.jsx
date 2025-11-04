@@ -74,9 +74,9 @@ function ContactPage() {
   };
 
   const courses = [
-    'Python Basics',
-    'Advanced Python',
-    'Machine Learning Intern'
+    'Python Basic',
+    'Python Advance',
+    'Machine Learning Internship'
   ];
 
   return (
@@ -138,8 +138,7 @@ function ContactPage() {
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">
-            Join Code Kivy
-          </h1>
+        Express Your Interest          </h1>
           <p className="text-gray-400 text-lg">
             Start your learning journey with us. Transform your career today.
           </p>
@@ -279,7 +278,7 @@ function ContactPage() {
                         </>
                       ) : (
                         <>
-                          Submit Enrollment
+                          Submit
                           <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                         </>
                       )}
@@ -294,7 +293,7 @@ function ContactPage() {
                   <div className="flex items-center gap-3 p-4 bg-green-900/30 border border-green-500/50 
                                 rounded-xl text-green-400 animate-[popUp_0.5s_ease-out_both] backdrop-blur-sm">
                     <CheckCircle className="h-6 w-6 flex-shrink-0" />
-                    <p className="font-medium">Thank you! Your enrollment request has been submitted successfully.</p>
+                    <p className="font-medium">Thank you for your interest! Our team will reach out to you shortly.</p>
                   </div>
                 )}
 
@@ -312,17 +311,17 @@ function ContactPage() {
             <div className="relative bg-gradient-to-r from-orange-500/5 to-orange-600/5 backdrop-blur-sm px-6 py-5 border-t border-gray-800/50">
               <p className="text-gray-400 text-center text-sm flex flex-wrap items-center justify-center gap-2">
                 <span>Need help?</span>
-                <a href="mailto:support@yourwebsite.com" 
+                <a href="mailto:ceocodekivy@gmail.com" 
                    className="text-orange-500 hover:text-orange-400 transition-colors font-semibold inline-flex items-center gap-1 group">
                   <Mail className="h-4 w-4" />
-                  support@yourwebsite.com
+                  ceocodekivy@gmail.com
                   <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </a>
                 <span>or</span>
-                <a href="tel:+911234567890" 
+                <a href="tel:+91 9390584021" 
                    className="text-orange-500 hover:text-orange-400 transition-colors font-semibold inline-flex items-center gap-1 group">
                   <Phone className="h-4 w-4" />
-                  +91 12345 67890
+                  +91 9390584021
                   <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </a>
               </p>
