@@ -93,10 +93,10 @@ const Footer = () => {
                 Platform
               </h3>
               <ul className="space-y-3">
-                {['Courses', 'Community', 'Pricing', 'Resources'].map((item) => (
+                {['Courses', 'Pricing', 'Resources'].map((item) => (
                   <li key={item}>
                     <a
-                      href="#"
+                      href="courses"
                       className="group inline-flex items-center text-sm text-gray-400 hover:text-orange-500 transition-all duration-300"
                     >
                       <span className="relative">
@@ -117,10 +117,10 @@ const Footer = () => {
                 Company
               </h3>
               <ul className="space-y-3">
-                {['About Us', 'Careers', 'Contact', 'Partners'].map((item) => (
+                {['About Us', 'Careers', 'Partners'].map((item) => (
                   <li key={item}>
                     <a
-                      href="#"
+                      href="about"
                       className="group inline-flex items-center text-sm text-gray-400 hover:text-orange-500 transition-all duration-300"
                     >
                       <span className="relative">
@@ -141,10 +141,10 @@ const Footer = () => {
                 Legal
               </h3>
               <ul className="space-y-3">
-                {['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Licensing'].map((item) => (
+                {['contact', 'Terms of Service', 'Cookie Policy', 'Licensing'].map((item) => (
                   <li key={item}>
                     <a
-                      href="#"
+                      href="contact"
                       className="group inline-flex items-center text-sm text-gray-400 hover:text-orange-500 transition-all duration-300"
                     >
                       <span className="relative">
