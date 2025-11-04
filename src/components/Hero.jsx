@@ -59,7 +59,7 @@ const Hero = () => {
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 animate-in fade-in slide-in-from-top-6 duration-700 delay-100">
             <span className="block text-white mb-2">Master the</span>
             <span className="block bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
-              Future of Code
+            Future with AI
             </span>
           </h1>
 
