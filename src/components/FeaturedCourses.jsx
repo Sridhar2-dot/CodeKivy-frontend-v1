@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { Clock, BarChart3, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
+import course1 from '../assets/course_1.jpeg'
+import course2 from '../assets/course_2.jpeg'
+import course3 from '../assets/course_3.png'
+
+
 
 // Import the OR image
 import orImage from '../assets/or.png';
 
 // Course images - Using high-quality placeholder images
 const courseImages = {
-  pythonBasics: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&auto=format&fit=crop&q=80',
-  advancedPython: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&auto=format&fit=crop&q=80',
-  machineLearning: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&auto=format&fit=crop&q=80'
+  pythonBasics: course1,
+  advancedPython: course2,
+  machineLearning: course3
 };
 
 // Updated courses data
@@ -18,7 +23,7 @@ const courses = [
     title: 'Python Basic',
     level: 'Beginner',
     duration: '20 Days',
-    href: '#',
+    href: 'courses',
     image: courseImages.pythonBasics,
     description: 'Start your coding journey with Python. Learn fundamental concepts, syntax, and build your first programs with hands-on projects.',
     students: '2.5k+',
@@ -29,7 +34,7 @@ const courses = [
     title: 'Python Advance',
     level: 'Intermediate',
     duration: '40 Days',
-    href: '#',
+    href: 'courses',
     image: courseImages.advancedPython,
     description: 'Master advanced Python concepts including OOP, decorators, generators, and asynchronous programming for professional development.',
     students: '1.8k+',
@@ -40,7 +45,7 @@ const courses = [
     title: 'Machine Learning Internship',
     level: 'Advanced',
     duration: '60 Days',
-    href: '#',
+    href: 'courses',
     image: courseImages.machineLearning,
     description: 'Dive deep into ML algorithms, neural networks, and real-world projects. Build predictive models and deploy AI solutions.',
     students: '3.2k+',
