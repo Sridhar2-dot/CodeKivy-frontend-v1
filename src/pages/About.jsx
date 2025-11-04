@@ -52,41 +52,41 @@ const About = () => {
   // Events data with placeholder images
   const events = [
     {
-      title: 'Python Workshop 2024',
-      college: 'IIT Hyderabad',
-      date: 'March 15, 2024',
-      attendees: '200+',
+      title: 'Rajasthan IT Day Hackathon 2k23',
+      college: 'University Of Rajasthan',
+      date: 'Aug 14, 2023',
+      attendees: '3500+',
       image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop',
-      description: 'Advanced Python programming workshop'
+      description: 'Advanced AI Hackathon'
     },
     {
-      title: 'AI/ML Bootcamp',
-      college: 'VIT Vellore',
-      date: 'April 22, 2024',
-      attendees: '150+',
-      image: 'https://images.unsplash.com/photo-1591453089816-0fbb971b454c?w=800&h=500&fit=crop',
-      description: 'Machine Learning fundamentals and applications'
-    },
-    {
-      title: 'Web Development Summit',
-      college: 'BITS Pilani Hyderabad',
-      date: 'May 10, 2024',
+      title: 'Free Python Classes',
+      college: 'IIIT Nuzvid',
+      date: 'Jun-Aug, 2024',
       attendees: '180+',
+      image: 'https://images.unsplash.com/photo-1591453089816-0fbb971b454c?w=800&h=500&fit=crop',
+      description: 'Python Programming and ML Fundamentals'
+    },
+    {
+      title: 'Machine Learning Workshop',
+      college: 'Saradha Degree College, Nuzvid',
+      date: 'Dec 20, 2023',
+      attendees: '100+',
       image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=500&fit=crop',
-      description: 'Full-stack development with Python and React'
+      description: 'ML Fundamentals and Applications'
     },
     {
-      title: 'Data Science Conference',
-      college: 'NIT Trichy',
-      date: 'June 5, 2024',
-      attendees: '220+',
+      title: 'Python Webinar',
+      college: 'NTR Degree College, Addanki',
+      date: 'Aug 8, 2023',
+      attendees: '200+',
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop',
-      description: 'Data analytics and visualization techniques'
+      description: 'Python Basics and Hands-on Projects'
     },
     {
-      title: 'Hackathon 2024',
-      college: 'IIIT Bangalore',
-      date: 'July 18, 2024',
+      title: 'AIML Workshop',
+      college: 'Indus Valley College, Bangalore',
+      date: 'Feb 20, 2025',
       attendees: '300+',
       image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=500&fit=crop',
       description: '24-hour coding challenge with prizes'
@@ -95,13 +95,13 @@ const About = () => {
 
   // --- Student Feedback Data ---
   const studentFeedback = [
-    { name: 'Alex M.', rating: 5, review: 'Amazing course! The project-based learning is top-notch.' },
-    { name: 'Sarah J.', rating: 4, review: 'Learned so much. The KiwiBot assistant was surprisingly helpful.' },
+    { name: 'Swathi M.', rating: 5, review: 'Amazing course! The project-based learning is top-notch.' },
+    { name: 'Rahul K.', rating: 4, review: 'Learned so much. The KivyBot assistant was surprisingly helpful.' },
     { name: 'Rohan P.', rating: 5, review: 'Great career support. I landed an internship right after.' },
     { name: 'Priya K.', rating: 5, review: 'Highly recommend Code Kivy for anyone serious about Python.' },
-    { name: 'Michael B.', rating: 4, review: 'Challenging but very rewarding. The instructors are great.' },
-    { name: 'Aisha S.', rating: 5, review: 'Best Python course I\'ve ever taken. Clear, concise, and practical.' },
-    { name: 'David L.', rating: 5, review: 'The AI/ML modules were fantastic and very up-to-date.' },
+    { name: 'Hari B.', rating: 4, review: 'Challenging but very rewarding. The instructors are great.' },
+    { name: 'Pavan HS.', rating: 5, review: 'Best Python course I\'ve ever taken. Clear, concise, and practical.' },
+    { name: 'Ayesha S.', rating: 5, review: 'The AI/ML modules were fantastic and very up-to-date.' },
   ];
 
   // Duplicate feedback for seamless loop
@@ -286,7 +286,7 @@ const About = () => {
   const features = [
     {
       icon: <BookOpen className="w-6 h-6" />,
-      title: 'Python-Focused Curriculum',
+      title: 'Python and AI-Focused Curriculum',
       description: 'Comprehensive learning path designed for real-world applications'
     },
     {
@@ -302,7 +302,7 @@ const About = () => {
     {
       icon: <Sparkles className="w-6 h-6" />,
       title: 'AI-Powered Assistant',
-      description: '24/7 support with our intelligent KiwiBot assistant'
+      description: '24/7 support with our intelligent KivyBot assistant'
     }
   ];
 
@@ -335,8 +335,8 @@ const About = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed animate-[fadeInUp_1s_ease-out_0.2s_both]">
-              Empowering the next generation of developers with
-              <span className="text-orange-500 font-semibold"> Python excellence</span> across South India
+              Empowering South India’s next generation of developers with
+              <span className="text-orange-500 font-semibold">Python and AI excellence.</span> across South India
             </p>
           </div>
 
@@ -434,7 +434,7 @@ const About = () => {
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto animate-[fadeInUp_1s_ease-out_0.2s_both]">
               To democratize quality programming education and create a thriving community
-              of Python developers across South India
+              of Python and AI developers across South India
             </p>
           </div>
 
