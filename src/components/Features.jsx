@@ -54,7 +54,7 @@ const features = [
     image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80',
   },
   {
-    name: 'Doubt Clear Sessions',
+    name: 'Doubt Sessions',
     description:
       'Never stay stuck. Get instant clarification from mentors in dedicated doubt-solving sessions designed for your success.',
     icon: MessageCircle,
@@ -128,7 +128,7 @@ const Features = () => {
             Everything you need to master your craft
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-300">
-            Experience world-class learning with interactive sessions, hands-on projects,
+            Experience world-class learning with live interactive sessions, hands-on projects,
             and continuous support designed to make you industry-ready.
           </p>
         </motion.div>
