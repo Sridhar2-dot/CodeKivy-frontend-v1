@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Phone, BookOpen, User, CheckCircle, Loader, Sparkles, ArrowRight, Star } from 'lucide-react';
+import { Mail, Phone, BookOpen, User, CheckCircle, Loader, Sparkles, ArrowRight, Star, AlertCircle } from 'lucide-react';
 
 function ContactPage() {
   const [formData, setFormData] = useState({
@@ -9,6 +9,8 @@ function ContactPage() {
     interestedCourse: ''
   });
   
+  // New state for holding validation errors
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle');
   const [focusedField, setFocusedField] = useState(null);
   const [particles, setParticles] = useState([]);
@@ -27,32 +29,81 @@ function ContactPage() {
   }, []);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+
+    // Clear the error for the field being edited
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: null
+      });
+    }
+  };
+
+  // New validation function
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Full Name validation
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email address is invalid";
+    }
+
+    // Mobile validation
+    if (!formData.mobile.trim()) {
+      newErrors.mobile = "Mobile number is required";
+    } else if (!/^\d{10}$/.test(formData.mobile)) {
+      newErrors.mobile = "Mobile number must be exactly 10 digits";
+    }
+
+    // Interested Course validation
+    if (!formData.interestedCourse) {
+      newErrors.interestedCourse = "Please select a course";
+    }
+
+    setErrors(newErrors);
+    // Return true if there are no errors, false otherwise
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
-    if (!formData.fullName || !formData.email || !formData.mobile || !formData.interestedCourse) {
-      alert('Please fill in all fields');
+    // Run validation first
+    const isValid = validateForm();
+
+    // If form is not valid, stop the submission
+    if (!isValid) {
       return;
     }
 
+    // If validation passes, proceed with submission
     setStatus('loading');
 
     try {
-      const GOOGLE_FORM_ACTION_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse';
+      // *** THIS IS THE CORRECTED LINE ***
+      // Changed '/viewform?usp=header' to '/formResponse'
+      const GOOGLE_FORM_ACTION_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScpZD8-pzSpmSv3oxwSFopjPPfQA1ThS7TQP7gCxWzwBGhd-g/formResponse';
       
       const formDataToSend = new FormData();
-      formDataToSend.append('entry.1234567890', formData.fullName);
-      formDataToSend.append('entry.0987654321', formData.email);
-      formDataToSend.append('entry.1122334455', formData.mobile);
-      formDataToSend.append('entry.5566778899', formData.interestedCourse);
+      // These entry IDs match what you provided
+      formDataToSend.append('entry.1975691195', formData.fullName);
+      formDataToSend.append('entry.733635433', formData.email);
+      formDataToSend.append('entry.1196799783', formData.mobile);
+      formDataToSend.append('entry.1705458462', formData.interestedCourse);
 
       await fetch(GOOGLE_FORM_ACTION_URL, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'no-cors', // 'no-cors' is correct to avoid CORS errors, even though you can't read the response
         body: formDataToSend
       });
 
@@ -63,6 +114,7 @@ function ContactPage() {
         mobile: '',
         interestedCourse: ''
       });
+      setErrors({}); // Clear errors on successful submission
 
       setTimeout(() => setStatus('idle'), 5000);
 
@@ -76,7 +128,7 @@ function ContactPage() {
   const courses = [
     'Python Basic',
     'Python Advance',
-    'Machine Learning Internship'
+    'Machine Learning Intern'
   ];
 
   return (
@@ -134,11 +186,12 @@ function ContactPage() {
         <div className="text-center mb-10 animate-[slideDown_0.8s_ease-out_both]">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/10 to-orange-600/10 border border-orange-500/20 mb-4">
             <Sparkles className="w-4 h-4 text-orange-500 animate-spin" style={{ animationDuration: '3s' }} />
-            <span className="text-sm font-semibold text-orange-500">800+ Students Enrolled</span>
+            <span className="text-sm font-semibold text-orange-500">Join 800+ Students</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">
-        Express Your Interest          </h1>
+            Join Code Kivy
+          </h1>
           <p className="text-gray-400 text-lg">
             Start your learning journey with us. Transform your career today.
           </p>
@@ -175,12 +228,21 @@ function ContactPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('fullName')}
                     onBlur={() => setFocusedField(null)}
-                    className="w-full px-4 py-3.5 bg-black/40 border border-gray-700 rounded-xl 
-                             text-white placeholder-gray-500 focus:outline-none focus:ring-2 
-                             focus:ring-orange-500/50 focus:border-orange-500 transition-all duration-300
-                             hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]"
+                    className={`w-full px-4 py-3.5 bg-black/40 border ${errors.fullName ? 'border-red-500' : 'border-gray-700'} rounded-xl 
+                                 text-white placeholder-gray-500 focus:outline-none focus:ring-2 
+                                 ${errors.fullName ? 'focus:ring-red-500/50' : 'focus:ring-orange-500/50'} 
+                                 ${errors.fullName ? 'focus:border-red-500' : 'focus:border-orange-500'} transition-all duration-300
+                                 hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]`}
                     placeholder="Enter your full name"
+                    required
                   />
+                  {/* Error Message */}
+                  {errors.fullName && (
+                    <p className="flex items-center gap-1 text-red-500 text-xs mt-2 animate-[popUp_0.3s_ease-out_both]">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.fullName}
+                    </p>
+                  )}
                 </div>
 
                 {/* Email Address */}
@@ -198,12 +260,21 @@ function ContactPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
-                    className="w-full px-4 py-3.5 bg-black/40 border border-gray-700 rounded-xl 
-                             text-white placeholder-gray-500 focus:outline-none focus:ring-2 
-                             focus:ring-orange-500/50 focus:border-orange-500 transition-all duration-300
-                             hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]"
+                    className={`w-full px-4 py-3.5 bg-black/40 border ${errors.email ? 'border-red-500' : 'border-gray-700'} rounded-xl 
+                                 text-white placeholder-gray-500 focus:outline-none focus:ring-2 
+                                 ${errors.email ? 'focus:ring-red-500/50' : 'focus:ring-orange-500/50'} 
+                                 ${errors.email ? 'focus:border-red-500' : 'focus:border-orange-500'} transition-all duration-300
+                                 hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]`}
                     placeholder="your.email@example.com"
+                    required
                   />
+                  {/* Error Message */}
+                  {errors.email && (
+                    <p className="flex items-center gap-1 text-red-500 text-xs mt-2 animate-[popUp_0.3s_ease-out_both]">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Mobile Number */}
@@ -222,12 +293,22 @@ function ContactPage() {
                     onFocus={() => setFocusedField('mobile')}
                     onBlur={() => setFocusedField(null)}
                     pattern="[0-9]{10}"
-                    className="w-full px-4 py-3.5 bg-black/40 border border-gray-700 rounded-xl 
-                             text-white placeholder-gray-500 focus:outline-none focus:ring-2 
-                             focus:ring-orange-500/50 focus:border-orange-500 transition-all duration-300
-                             hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]"
+                    maxLength="10" // Added for better UX
+                    className={`w-full px-4 py-3.5 bg-black/40 border ${errors.mobile ? 'border-red-500' : 'border-gray-700'} rounded-xl 
+                                 text-white placeholder-gray-500 focus:outline-none focus:ring-2 
+                                 ${errors.mobile ? 'focus:ring-red-500/50' : 'focus:ring-orange-500/50'} 
+                                 ${errors.mobile ? 'focus:border-red-500' : 'focus:border-orange-500'} transition-all duration-300
+                                 hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]`}
                     placeholder="10-digit mobile number"
+                    required
                   />
+                  {/* Error Message */}
+                  {errors.mobile && (
+                    <p className="flex items-center gap-1 text-red-500 text-xs mt-2 animate-[popUp_0.3s_ease-out_both]">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.mobile}
+                    </p>
+                  )}
                 </div>
 
                 {/* Interested Course */}
@@ -244,31 +325,41 @@ function ContactPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('interestedCourse')}
                     onBlur={() => setFocusedField(null)}
-                    className="w-full px-4 py-3.5 bg-black/40 border border-gray-700 rounded-xl 
-                             text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 
-                             focus:border-orange-500 transition-all duration-300 cursor-pointer 
-                             hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]"
+                    className={`w-full px-4 py-3.5 bg-black/40 border ${errors.interestedCourse ? 'border-red-500' : 'border-gray-700'} rounded-xl 
+                                 text-white focus:outline-none focus:ring-2 
+                                 ${errors.interestedCourse ? 'focus:ring-red-500/50' : 'focus:ring-orange-500/50'} 
+                                 ${errors.interestedCourse ? 'focus:border-red-500' : 'focus:border-orange-500'} transition-all duration-300 
+                                 cursor-pointer hover:border-gray-600 hover:bg-black/60 focus:scale-[1.02]
+                                 ${formData.interestedCourse === '' ? 'text-gray-500' : 'text-white'}`}
+                    required
                   >
-                    <option value="" className="bg-gray-900">Select a course</option>
+                    <option value="" disabled className="bg-gray-900 text-gray-500">Select a course</option>
                     {courses.map((course) => (
-                      <option key={course} value={course} className="bg-gray-900">
+                      <option key={course} value={course} className="bg-gray-900 text-white">
                         {course}
                       </option>
                     ))}
                   </select>
+                  {/* Error Message */}
+                  {errors.interestedCourse && (
+                    <p className="flex items-center gap-1 text-red-500 text-xs mt-2 animate-[popUp_0.3s_ease-out_both]">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.interestedCourse}
+                    </p>
+                  )}
                 </div>
 
                 {/* Submit Button */}
-                <div className="animate-[slideRight_0.6s_ease-out_0.5s_both]">
+                <div className="animate-[slideRight_0.6s_ease-out_0.5s_both] pt-2">
                   <button
                     onClick={handleSubmit}
                     disabled={status === 'loading'}
                     className="group relative w-full mt-4 py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 
-                             hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg
-                             rounded-xl shadow-xl shadow-orange-500/30 transition-all duration-300
-                             disabled:opacity-50 disabled:cursor-not-allowed flex items-center 
-                             justify-center gap-2 hover:shadow-orange-500/50 hover:scale-[1.02]
-                             active:scale-[0.98] overflow-hidden"
+                                 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg
+                                 rounded-xl shadow-xl shadow-orange-500/30 transition-all duration-300
+                                 disabled:opacity-50 disabled:cursor-not-allowed flex items-center 
+                                 justify-center gap-2 hover:shadow-orange-500/50 hover:scale-[1.02]
+                                 active:scale-[0.98] overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {status === 'loading' ? (
@@ -278,7 +369,7 @@ function ContactPage() {
                         </>
                       ) : (
                         <>
-                          Submit
+                          Submit Enrollment
                           <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                         </>
                       )}
@@ -291,15 +382,16 @@ function ContactPage() {
                 {/* Success/Error Messages */}
                 {status === 'success' && (
                   <div className="flex items-center gap-3 p-4 bg-green-900/30 border border-green-500/50 
-                                rounded-xl text-green-400 animate-[popUp_0.5s_ease-out_both] backdrop-blur-sm">
+                                  rounded-xl text-green-400 animate-[popUp_0.5s_ease-out_both] backdrop-blur-sm">
                     <CheckCircle className="h-6 w-6 flex-shrink-0" />
-                    <p className="font-medium">Thank you for your interest! Our team will reach out to you shortly.</p>
+                    <p className="font-medium">Thank you! Your enrollment request has been submitted successfully.</p>
                   </div>
                 )}
 
                 {status === 'error' && (
                   <div className="flex items-center gap-3 p-4 bg-red-900/30 border border-red-500/50 
-                                rounded-xl text-red-400 animate-[popUp_0.5s_ease-out_both] backdrop-blur-sm">
+                                  rounded-xl text-red-400 animate-[popUp_0.5s_ease-out_both] backdrop-blur-sm">
+                    <AlertCircle className="h-6 w-6 flex-shrink-0" />
                     <p className="font-medium">Something went wrong. Please try again or contact us directly.</p>
                   </div>
                 )}
@@ -318,10 +410,10 @@ function ContactPage() {
                   <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </a>
                 <span>or</span>
-                <a href="tel:+91 9390584021" 
+                <a href="tel:+919390584021" 
                    className="text-orange-500 hover:text-orange-400 transition-colors font-semibold inline-flex items-center gap-1 group">
                   <Phone className="h-4 w-4" />
-                  +91 9390584021
+                  +91-9390584021
                   <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                 </a>
               </p>
@@ -361,7 +453,7 @@ function ContactPage() {
         @keyframes popUp {
           from {
             opacity: 0;
-            transform: scale(0.9) translateY(20px);
+            transform: scale(0.9) translateY(10px); /* Adjusted for a subtle pop */
           }
           to {
             opacity: 1;
@@ -412,6 +504,19 @@ function ContactPage() {
         .animate-shimmer {
           animation: shimmer 3s infinite linear;
         }
+
+        /* Styling for the dropdown placeholder */
+        select:required:invalid {
+          color: #6b7280; /* text-gray-500 */
+        }
+        option[value=""][disabled] {
+          display: none;
+        }
+        option {
+          color: #ffffff; /* text-white */
+          background-color: #1f2937; /* bg-gray-800 or 900 */
+        }
+        
       `}</style>
     </div>
   );
