@@ -341,7 +341,7 @@ const About = () => {
 
             <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed animate-[fadeInUp_1s_ease-out_0.2s_both]">
               Empowering South India’s next generation of developers with
-              <span className="text-orange-500 font-semibold"> Python and AI excellence.</span> across South India
+              <span className="text-orange-500 font-semibold"> Python and AI excellence</span> across South India
             </p>
           </div>
 
