@@ -65,8 +65,7 @@ const Hero = () => {
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto mb-12 leading-relaxed animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
-            Transform your career with cutting-edge courses in Python, Machine Learning and AI.
-            Learn from industry experts and build real-world projects.
+            Transform your career with industry-focused courses in Python, Machine Learning, and AI. Learn from experts and build hands-on, real-world projects.
           </p>
 
           {/* CTA Buttons */}
@@ -115,12 +114,12 @@ const Hero = () => {
               <div className="text-sm text-gray-400">Active Students</div>
             </div>
             <div className="text-center border-x border-gray-700">
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">5+</div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">3</div>
               <div className="text-sm text-gray-400">Expert Courses</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">4+</div>
-              <div className="text-sm text-gray-400">States</div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">25+</div>
+              <div className="text-sm text-gray-400">Institutes</div>
             </div>
           </div>
         </div>
