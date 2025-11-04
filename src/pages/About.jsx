@@ -11,6 +11,11 @@ import image3 from '../assets/TG1.png';
 import image4 from '../assets/TM.png';
 import msmeImage from '../assets/MSME.png';
 import founderImage from '../assets/founder.jpg';
+import rajastan from '../assets/3.jpg';
+import nuz from '../assets/2.jpg';
+import webi from '../assets/1.jpg';
+import indus from '../assets/5.jpg';
+import sarada from '../assets/4.jpg';
 
 // --- IMPORT YOUR VIDEO HERE ---
 // Make sure this path is correct
@@ -43,10 +48,10 @@ const About = () => {
   // --- Video Player State and Refs ---
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // 1. Mute state starts true
-  const [progress, setProgress] = useState(0); 
+  const [progress, setProgress] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false); // <-- NEW: State for dragging
   const videoRef = useRef(null);
-  const progressBarRef = useRef(null); 
+  const progressBarRef = useRef(null);
   const videoContainerRef = useRef(null); // Ref for the video section
 
   // Events data with placeholder images
@@ -56,7 +61,7 @@ const About = () => {
       college: 'University Of Rajasthan',
       date: 'Aug 14, 2023',
       attendees: '3500+',
-      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop',
+      image: rajastan,
       description: 'Advanced AI Hackathon'
     },
     {
@@ -64,7 +69,7 @@ const About = () => {
       college: 'IIIT Nuzvid',
       date: 'Jun-Aug, 2024',
       attendees: '180+',
-      image: 'https://images.unsplash.com/photo-1591453089816-0fbb971b454c?w=800&h=500&fit=crop',
+      image: nuz,
       description: 'Python Programming and ML Fundamentals'
     },
     {
@@ -72,7 +77,7 @@ const About = () => {
       college: 'Saradha Degree College, Nuzvid',
       date: 'Dec 20, 2023',
       attendees: '100+',
-      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=500&fit=crop',
+      image: sarada,
       description: 'ML Fundamentals and Applications'
     },
     {
@@ -80,7 +85,7 @@ const About = () => {
       college: 'NTR Degree College, Addanki',
       date: 'Aug 8, 2023',
       attendees: '200+',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop',
+      image: webi,
       description: 'Python Basics and Hands-on Projects'
     },
     {
@@ -88,7 +93,7 @@ const About = () => {
       college: 'Indus Valley College, Bangalore',
       date: 'Feb 20, 2025',
       attendees: '300+',
-      image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=500&fit=crop',
+      image: indus,
       description: '24-hour coding challenge with prizes'
     }
   ];
@@ -198,10 +203,10 @@ const About = () => {
     // Clamp clickX to be within the bar's bounds
     if (clickX < 0) clickX = 0;
     if (clickX > barWidth) clickX = barWidth;
-    
+
     const seekPercentage = clickX / barWidth;
     const { duration } = videoRef.current;
-    
+
     videoRef.current.currentTime = duration * seekPercentage;
     setProgress(seekPercentage * 100); // Update visual progress immediately
   }, []); // Empty dependency array, refs are stable
@@ -495,8 +500,8 @@ const About = () => {
                 <div
                   key={index}
                   className={`absolute inset-0 transition-all duration-700 ease-in-out ${index === currentEventIndex
-                      ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-95 pointer-events-none'
+                    ? 'opacity-100 scale-100'
+                    : 'opacity-0 scale-95 pointer-events-none'
                     }`}
                 >
                   <div className="relative h-full rounded-3xl overflow-hidden group">
@@ -564,8 +569,8 @@ const About = () => {
                     key={index}
                     onClick={() => setCurrentEventIndex(index)}
                     className={`transition-all duration-300 rounded-full ${index === currentEventIndex
-                        ? 'w-12 bg-orange-500'
-                        : 'w-3 bg-gray-600 hover:bg-gray-500'
+                      ? 'w-12 bg-orange-500'
+                      : 'w-3 bg-gray-600 hover:bg-gray-500'
                       } h-3`}
                     aria-label={`Go to event ${index + 1}`}
                   />
@@ -705,7 +710,7 @@ const About = () => {
               controls={false} // Hide default controls
               className="absolute inset-0 w-full h-full object-cover z-0"
               onTimeUpdate={handleTimeUpdate} // <-- MODIFIED: Attach time update handler
-              onLoadedMetadata={handleTimeUpdate} 
+              onLoadedMetadata={handleTimeUpdate}
             />
 
             {/* Animated Play Button Overlay */}
@@ -801,7 +806,7 @@ const About = () => {
             What Our Founder & CEO Says
           </h2>
           <div className="flex flex-col md:flex-row items-center gap-8 bg-gradient-to-br from-gray-900 to-black border-1 border-gray-950 rounded-2xl p-8 md:p-12">
-            
+
             {/* --- MODIFIED: Image on Left --- */}
             <div className="flex-shrink-0">
               {/* --- NEW: Wrapper for animation --- */}
@@ -822,8 +827,17 @@ const About = () => {
               <p className="text-lg text-orange-400 font-semibold mb-4">
                 AI Engineer @NYX
               </p>
+              <p className="flex items-center text-lg text-orange-400 font-semibold mb-4">
+                <img
+                  width="20"
+                  height="25"
+                  src="https://img.icons8.com/color/48/marker--v1.png"
+                  alt="Location marker icon"
+                />
+                <span className="ml-2">Bangalore</span>
+              </p>
               <p className="text-xl text-gray-300 leading-relaxed">
-"Our mission is to empower every student with the skills and confidence to build their future in AI, while making quality tech education accessible across South India."              </p>
+                "Our mission is to empower every student with the skills and confidence to build their future in AI, while making quality tech education accessible across South India."              </p>
             </div>
           </div>
         </div>
