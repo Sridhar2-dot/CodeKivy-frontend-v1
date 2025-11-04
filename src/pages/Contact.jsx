@@ -128,7 +128,7 @@ function ContactPage() {
   const courses = [
     'Python Basic',
     'Python Advance',
-    'Machine Learning Intern'
+    'Machine Learning Internship'
   ];
 
   return (
@@ -186,11 +186,11 @@ function ContactPage() {
         <div className="text-center mb-10 animate-[slideDown_0.8s_ease-out_both]">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/10 to-orange-600/10 border border-orange-500/20 mb-4">
             <Sparkles className="w-4 h-4 text-orange-500 animate-spin" style={{ animationDuration: '3s' }} />
-            <span className="text-sm font-semibold text-orange-500">Join 800+ Students</span>
+            <span className="text-sm font-semibold text-orange-500">800+ Students Enrolled</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">
-            Join Code Kivy
+            Express Your Interest
           </h1>
           <p className="text-gray-400 text-lg">
             Start your learning journey with us. Transform your career today.
@@ -369,7 +369,7 @@ function ContactPage() {
                         </>
                       ) : (
                         <>
-                          Submit Enrollment
+                          Submit
                           <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                         </>
                       )}
@@ -384,7 +384,7 @@ function ContactPage() {
                   <div className="flex items-center gap-3 p-4 bg-green-900/30 border border-green-500/50 
                                   rounded-xl text-green-400 animate-[popUp_0.5s_ease-out_both] backdrop-blur-sm">
                     <CheckCircle className="h-6 w-6 flex-shrink-0" />
-                    <p className="font-medium">Thank you! Your enrollment request has been submitted successfully.</p>
+                    <p className="font-medium">Thank you for you Interest! Our team will reach out to you shortly.</p>
                   </div>
                 )}
 
