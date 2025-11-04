@@ -1,10 +1,34 @@
 import React, { useState } from 'react';
-import { Github, Twitter, Linkedin, Mail, ArrowRight, Sparkles } from 'lucide-react';
+import { 
+  // Github icon removed
+  Twitter, 
+  Linkedin, 
+  Mail, 
+  ArrowRight, 
+  Sparkles, 
+  Instagram 
+} from 'lucide-react';
 import Logo from '../assets/Logo.jpg';
 
 const Footer = () => {
   const [hoveredSocial, setHoveredSocial] = useState(null);
 
+  // Defined social links array here
+  const socialLinks = [
+    // GitHub object removed
+    { 
+      icon: Linkedin, 
+      href: 'https://www.linkedin.com/company/code-kivy/', 
+      name: 'LinkedIn', 
+      color: 'from-blue-600 to-blue-700' 
+    },
+    { 
+      icon: Instagram, 
+      href: 'https://www.instagram.com/code_kivy', 
+      name: 'Instagram', 
+      color: 'from-pink-500 to-purple-600' 
+    },
+  ];
 
   return (
     <footer className="relative bg-black overflow-hidden">
@@ -47,13 +71,9 @@ const Footer = () => {
             </div>
 
             
-
             {/* Social Links */}
             <div className="flex items-center gap-4">
-              {[
-                { icon: Github, href: '#', name: 'GitHub', color: 'from-gray-600 to-gray-700' },
-                { icon: Linkedin, href: '#', name: 'LinkedIn', color: 'from-blue-600 to-blue-700' },
-              ].map((social, index) => {
+              {socialLinks.map((social, index) => { // Use the socialLinks array
                 const Icon = social.icon;
                 const isHovered = hoveredSocial === social.name;
                 
@@ -61,8 +81,10 @@ const Footer = () => {
                   <a
                     key={social.name}
                     href={social.href}
+                    target="_blank" 
+                    rel="noopener noreferrer" 
                     className="relative p-3 bg-gray-900/50 rounded-xl border border-gray-800 
-                             hover:border-orange-500/50 transition-all duration-300 group"
+                              hover:border-orange-500/50 transition-all duration-300 group"
                     onMouseEnter={() => setHoveredSocial(social.name)}
                     onMouseLeave={() => setHoveredSocial(null)}
                     aria-label={social.name}
@@ -151,7 +173,7 @@ const Footer = () => {
                         {item}
                         <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"></span>
                       </span>
-                      <ArrowRight className="w-0 h-3.5 text-orange-500 opacity-0 group-hover:w-3.5 group-hover:opacity-100 group-hover:ml-1 transition-all duration-300" />
+                      <ArrowRight className="w-0 h-3.5 text-orange-500 opacity-0 group-hover:w-3.5 group-hover:opacity-100 group-hover:ml-1 transition-all duration-3s" />
                     </a>
                   </li>
                 ))}
