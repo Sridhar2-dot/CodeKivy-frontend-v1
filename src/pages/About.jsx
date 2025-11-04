@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'; // Added useRef
+import React, { useState, useEffect, useRef, useCallback } from 'react'; // Added useCallback
 import {
   MapPin, Users, GraduationCap, BookOpen, TrendingUp, Award, Target, Sparkles,
   BadgeCheck, Calendar, ChevronLeft, ChevronRight, Star,
@@ -43,7 +43,10 @@ const About = () => {
   // --- Video Player State and Refs ---
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // 1. Mute state starts true
+  const [progress, setProgress] = useState(0); 
+  const [isSeeking, setIsSeeking] = useState(false); // <-- NEW: State for dragging
   const videoRef = useRef(null);
+  const progressBarRef = useRef(null); 
   const videoContainerRef = useRef(null); // Ref for the video section
 
   // Events data with placeholder images
@@ -172,6 +175,77 @@ const About = () => {
     // This just toggles the state, the useEffect handles the rest
     setIsMuted((prev) => !prev);
   };
+
+  // 5. --- MODIFIED: Function to update progress bar ---
+  const handleTimeUpdate = () => {
+    // Only update progress if the user is NOT actively dragging the bar
+    if (videoRef.current && !isSeeking) {
+      const { currentTime, duration } = videoRef.current;
+      if (duration) { // Avoid division by zero
+        setProgress((currentTime / duration) * 100);
+      }
+    }
+  };
+
+  // 6. --- NEW: Function to handle seeking (both click and drag) ---
+  const handleSeek = useCallback((e) => {
+    if (!videoRef.current || !progressBarRef.current || !videoRef.current.duration) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    let clickX = e.clientX - rect.left;
+    const barWidth = rect.width;
+
+    // Clamp clickX to be within the bar's bounds
+    if (clickX < 0) clickX = 0;
+    if (clickX > barWidth) clickX = barWidth;
+    
+    const seekPercentage = clickX / barWidth;
+    const { duration } = videoRef.current;
+    
+    videoRef.current.currentTime = duration * seekPercentage;
+    setProgress(seekPercentage * 100); // Update visual progress immediately
+  }, []); // Empty dependency array, refs are stable
+
+  // 7. --- NEW: MouseDown handler to start seeking ---
+  const handleSeekMouseDown = useCallback((e) => {
+    setIsSeeking(true);
+    handleSeek(e); // Seek on the initial click
+  }, [handleSeek]);
+
+  // 8. --- NEW: MouseMove handler (will be attached to window) ---
+  const handleSeekMouseMove = useCallback((e) => {
+    handleSeek(e); // Continuously seek while dragging
+  }, [handleSeek]);
+
+  // 9. --- NEW: MouseUp handler (will be attached to window) ---
+  const handleSeekMouseUp = useCallback(() => {
+    setIsSeeking(false);
+  }, []);
+
+  // 10. --- NEW: Effect to attach global listeners for dragging ---
+  useEffect(() => {
+    // Define functions to pass to listeners
+    const handleMove = (e) => {
+      if (isSeeking) {
+        handleSeekMouseMove(e);
+      }
+    };
+    const handleUp = (e) => {
+      if (isSeeking) {
+        handleSeekMouseUp(e);
+      }
+    };
+
+    // Add listeners when seeking starts
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleUp);
+
+    // Cleanup listeners
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleUp);
+    };
+  }, [isSeeking, handleSeekMouseMove, handleSeekMouseUp]); // Re-run when these change
 
   // --- End of Video Logic ---
 
@@ -393,122 +467,122 @@ const About = () => {
 
       {/* Events Carousel Section */}
       <section className="py-20 px-6 bg-black relative overflow-hidden">
-      {/* Decorative Background Blurs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        {/* Decorative Background Blurs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2 mb-4">
-            <Calendar className="w-4 h-4 text-purple-400" />
-            <span className="text-sm font-medium text-purple-300">Past Events</span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            Our Events
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Bringing tech education to campuses across South India
-          </p>
-        </div>
-
-        {/* Carousel Container */}
-        <div className="relative max-w-6xl mx-auto">
-          {/* Main Carousel */}
-          {/* Decreased height for small screens (h-[350px] sm:h-[500px]) */}
-          <div className="relative h-[350px] sm:h-[500px] rounded-3xl overflow-hidden"> 
-            {events.map((event, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-all duration-700 ease-in-out ${index === currentEventIndex
-                  ? 'opacity-100 scale-100'
-                  : 'opacity-0 scale-95 pointer-events-none'
-                  }`}
-              >
-                <div className="relative h-full rounded-3xl overflow-hidden group">
-                  {/* Event Image */}
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                  />
-
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-
-                  {/* Event Content */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
-                    {/* Event Details Badge */}
-                    <div className="flex flex-wrap gap-3 mb-6">
-                      <div className="flex items-center gap-2 bg-orange-500/20 backdrop-blur-md border border-orange-500/30 rounded-full px-4 py-2">
-                        <Calendar className="w-4 h-4 text-orange-400" />
-                        <span className="text-sm text-orange-300 font-medium">{event.date}</span>
-                      </div>
-                      <div className="flex items-center gap-2 bg-purple-500/20 backdrop-blur-md border border-purple-500/30 rounded-full px-4 py-2">
-                        <Users className="w-4 h-4 text-purple-400" />
-                        <span className="text-sm text-purple-300 font-medium">{event.attendees} Attendees</span>
-                      </div>
-                    </div>
-
-                    {/* Event Title & Description */}
-                    <h3 className="text-3xl md:text-5xl font-bold text-white mb-3">
-                      {event.title}
-                    </h3>
-                    <p className="text-lg text-gray-300 mb-6 max-w-2xl">
-                      {event.description}
-                    </p>
-
-                    {/* College Name Highlight */}
-                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full px-6 py-3 w-fit">
-                      <MapPin className="w-5 h-5 text-white" />
-                      <span className="text-white font-bold text-lg">{event.college}</span>
-                    </div>
-                  </div>
-
-                  {/* Decorative Corner Elements */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-500/30 to-transparent rounded-bl-full"></div>
-                  <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/30 to-transparent rounded-tr-full"></div>
-                </div>
-              </div>
-            ))}
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2 mb-4">
+              <Calendar className="w-4 h-4 text-purple-400" />
+              <span className="text-sm font-medium text-purple-300">Past Events</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              Our Events
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Bringing tech education to campuses across South India
+            </p>
           </div>
 
-          {/* Combined Navigation and Indicators at the Bottom */}
-          <div className="flex justify-center items-center gap-4 mt-8">
-            {/* Previous Button */}
-            <button
-              onClick={prevEvent}
-              className="hover:bg-white/20 rounded-full p-2 cursor-pointer transition-all duration-300 hover:scale-110 z-20"
-            >
-              <ChevronLeft className="w-6 h-6 text-white" />
-            </button>
-
-            {/* Carousel Indicators */}
-            <div className="flex justify-center gap-2">
-              {events.map((_, index) => (
-                <button
+          {/* Carousel Container */}
+          <div className="relative max-w-6xl mx-auto">
+            {/* Main Carousel */}
+            {/* Decreased height for small screens (h-[350px] sm:h-[500px]) */}
+            <div className="relative h-[350px] sm:h-[500px] rounded-3xl overflow-hidden">
+              {events.map((event, index) => (
+                <div
                   key={index}
-                  onClick={() => setCurrentEventIndex(index)}
-                  className={`transition-all duration-300 rounded-full ${index === currentEventIndex
-                    ? 'w-12 bg-orange-500'
-                    : 'w-3 bg-gray-600 hover:bg-gray-500'
-                    } h-3`}
-                  aria-label={`Go to event ${index + 1}`}
-                />
+                  className={`absolute inset-0 transition-all duration-700 ease-in-out ${index === currentEventIndex
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-95 pointer-events-none'
+                    }`}
+                >
+                  <div className="relative h-full rounded-3xl overflow-hidden group">
+                    {/* Event Image */}
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    />
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+
+                    {/* Event Content */}
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
+                      {/* Event Details Badge */}
+                      <div className="flex flex-wrap gap-3 mb-6">
+                        <div className="flex items-center gap-2 bg-orange-500/20 backdrop-blur-md border border-orange-500/30 rounded-full px-4 py-2">
+                          <Calendar className="w-4 h-4 text-orange-400" />
+                          <span className="text-sm text-orange-300 font-medium">{event.date}</span>
+                        </div>
+                        <div className="flex items-center gap-2 bg-purple-500/20 backdrop-blur-md border border-purple-500/30 rounded-full px-4 py-2">
+                          <Users className="w-4 h-4 text-purple-400" />
+                          <span className="text-sm text-purple-300 font-medium">{event.attendees} Attendees</span>
+                        </div>
+                      </div>
+
+                      {/* Event Title & Description */}
+                      <h3 className="text-3xl md:text-5xl font-bold text-white mb-3">
+                        {event.title}
+                      </h3>
+                      <p className="text-lg text-gray-300 mb-6 max-w-2xl">
+                        {event.description}
+                      </p>
+
+                      {/* College Name Highlight */}
+                      <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full px-6 py-3 w-fit">
+                        <MapPin className="w-5 h-5 text-white" />
+                        <span className="text-white font-bold text-lg">{event.college}</span>
+                      </div>
+                    </div>
+
+                    {/* Decorative Corner Elements */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-500/30 to-transparent rounded-bl-full"></div>
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/30 to-transparent rounded-tr-full"></div>
+                  </div>
+                </div>
               ))}
             </div>
 
-            {/* Next Button */}
-            <button
-              onClick={nextEvent}
-              className="hover:bg-white/20 rounded-full p-2 transition-all cursor-pointer duration-300 hover:scale-110 z-20"
-            >
-              <ChevronRight className="w-6 h-6 text-white" />
-            </button>
+            {/* Combined Navigation and Indicators at the Bottom */}
+            <div className="flex justify-center items-center gap-4 mt-8">
+              {/* Previous Button */}
+              <button
+                onClick={prevEvent}
+                className="hover:bg-white/20 rounded-full p-2 cursor-pointer transition-all duration-300 hover:scale-110 z-20"
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </button>
+
+              {/* Carousel Indicators */}
+              <div className="flex justify-center gap-2">
+                {events.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentEventIndex(index)}
+                    className={`transition-all duration-300 rounded-full ${index === currentEventIndex
+                        ? 'w-12 bg-orange-500'
+                        : 'w-3 bg-gray-600 hover:bg-gray-500'
+                      } h-3`}
+                    aria-label={`Go to event ${index + 1}`}
+                  />
+                ))}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={nextEvent}
+                className="hover:bg-white/20 rounded-full p-2 transition-all cursor-pointer duration-300 hover:scale-110 z-20"
+              >
+                <ChevronRight className="w-6 h-6 text-white" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
       {/* --- Student Feedback Section --- */}
       <section className="py-16 bg-black text-white">
@@ -630,6 +704,8 @@ const About = () => {
               playsInline
               controls={false} // Hide default controls
               className="absolute inset-0 w-full h-full object-cover z-0"
+              onTimeUpdate={handleTimeUpdate} // <-- MODIFIED: Attach time update handler
+              onLoadedMetadata={handleTimeUpdate} 
             />
 
             {/* Animated Play Button Overlay */}
@@ -657,38 +733,60 @@ const About = () => {
               )}
             </AnimatePresence>
 
-            {/* NEW & MODIFIED: Custom Controls (Pause & Mute) */}
+            {/* Custom Controls (Pause & Mute) */}
             <AnimatePresence>
               {isPlaying && (
-                // NEW: Flex container for controls
-                <motion.div
-                  className="absolute z-20 bottom-4 right-4 flex items-center gap-2"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.5 }}
-                >
-                  {/* NEW: Pause Button */}
-                  <button
-                    onClick={handlePause}
-                    className="bg-black/30 backdrop-blur-md text-white p-2 rounded-full transition-all hover:bg-black/50"
-                    title="Pause"
+                <>
+                  {/* --- MODIFIED: Progress Bar --- */}
+                  <motion.div
+                    className="absolute z-20 bottom-4 left-4 right-24" // Positioned at bottom, leaves space for controls
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <Pause className="w-5 h-5" fill="currentColor" />
-                  </button>
+                    <div
+                      ref={progressBarRef}
+                      onMouseDown={handleSeekMouseDown} // <-- CHANGED from onClick
+                      className="w-full h-1.5 bg-white/30 rounded-full cursor-pointer group-hover:h-2 transition-all duration-200 backdrop-blur-sm"
+                    >
+                      <div
+                        className="h-full bg-orange-500 rounded-full"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                  </motion.div>
 
-                  {/* MODIFIED: Mute/Unmute Button */}
-                  <button
-                    onClick={toggleMute}
-                    className="bg-black/30 backdrop-blur-md text-white p-2 rounded-full transition-all hover:bg-black/50"
-                    title={isMuted ? 'Unmute' : 'Mute'}
+                  {/* --- EXISTING: Custom Controls (Pause & Mute) --- */}
+                  <motion.div
+                    className="absolute z-20 bottom-4 right-4 flex items-center gap-2"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
                   >
-                    {isMuted ? (
-                      <VolumeX className="w-5 h-5" />
-                    ) : (
-                      <Volume2 className="w-5 h-5" />
-                    )}
-                  </button>
-                </motion.div>
+                    {/* Pause Button */}
+                    <button
+                      onClick={handlePause}
+                      className="bg-black/30 backdrop-blur-md text-white p-2 rounded-full transition-all hover:bg-black/50"
+                      title="Pause"
+                    >
+                      <Pause className="w-5 h-5" fill="currentColor" />
+                    </button>
+
+                    {/* Mute/Unmute Button */}
+                    <button
+                      onClick={toggleMute}
+                      className="bg-black/30 backdrop-blur-md text-white p-2 rounded-full transition-all hover:bg-black/50"
+                      title={isMuted ? 'Unmute' : 'Mute'}
+                    >
+                      {isMuted ? (
+                        <VolumeX className="w-5 h-5" />
+                      ) : (
+                        <Volume2 className="w-5 h-5" />
+                      )}
+                    </button>
+                  </motion.div>
+                </>
               )}
             </AnimatePresence>
 
@@ -703,13 +801,17 @@ const About = () => {
             What Our Founder & CEO Says
           </h2>
           <div className="flex flex-col md:flex-row items-center gap-8 bg-gradient-to-br from-gray-900 to-black border-1 border-gray-950 rounded-2xl p-8 md:p-12">
-            {/* Image on Left */}
+            
+            {/* --- MODIFIED: Image on Left --- */}
             <div className="flex-shrink-0">
-              <img
-                src={founderImage}
-                alt="Pavan Nekkanti, Founder & CEO"
-                className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-gray-800"
-              />
+              {/* --- NEW: Wrapper for animation --- */}
+              <div className="relative w-32 h-32 md:w-40 md:h-40 animate-[pulse-shadow_3s_ease-in-out_infinite] rounded-full">
+                <img
+                  src={founderImage}
+                  alt="Pavan Nekkanti, Founder & CEO"
+                  className="w-full h-full rounded-full object-cover border-4 border-gray-800"
+                />
+              </div>
             </div>
 
             {/* Text Content on Right */}
@@ -777,6 +879,16 @@ const About = () => {
 
         .animate-marquee {
           animation: marquee 40s linear infinite;
+        }
+
+        {/* --- NEW: Founder Image Pulse Animation --- */}
+        @keyframes pulse-shadow {
+          0%, 100% {
+            box-shadow: 0 0 20px 0px rgba(249, 115, 22, 0.3); /* orange-500 at 30% */
+          }
+          50% {
+            box-shadow: 0 0 30px 8px rgba(249, 115, 22, 0.5); /* orange-500 at 50% */
+          }
         }
       `}</style>
     </div>
