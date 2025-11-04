@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Clock, BarChart3, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 import course1 from '../assets/Generated%20Image%20November%2005%2C%202025%20-%201_41AM.png'
-import course2 from '../assets/course_2.jpeg'
-import course3 from '../assets/course_3.png'
+import course2 from '../assets/Generated%20Image%20November%2005%2C%202025%20-%201_48AM.png'
+import course3 from '..src/assets/111.png'
 
 
 
@@ -25,20 +25,20 @@ const courses = [
     duration: '20 Days',
     href: 'courses',
     image: courseImages.pythonBasics,
-    description: 'Start your coding journey with Python. Learn fundamental concepts, syntax, and build your first programs with hands-on projects.',
-    students: '2.5k+',
-    rating: 4.8,
+    description: 'Easy to learn, fun to code, and the best first step for school students exploring the world of programming.',
+    students: '200+',
+    rating: 4.9,
   },
   {
     id: 2,
     title: 'Python Advance',
-    level: 'Intermediate',
+    level: 'Beginner',
     duration: '40 Days',
     href: 'courses',
     image: courseImages.advancedPython,
-    description: 'Master advanced Python concepts including OOP, decorators, generators, and asynchronous programming for professional development.',
-    students: '1.8k+',
-    rating: 4.9,
+    description: 'Designed for beginners who aspire to master Python completely and build a strong programming foundation.',
+    students: '500+',
+    rating: 5.0,
   },
   {
     id: 3,
@@ -48,7 +48,7 @@ const courses = [
     href: 'courses',
     image: courseImages.machineLearning,
     description: 'Dive deep into ML algorithms, neural networks, and real-world projects. Build predictive models and deploy AI solutions.',
-    students: '3.2k+',
+    students: '120+',
     rating: 5.0,
   },
 ];
