@@ -808,7 +808,7 @@ const About = () => {
               <div className="relative w-32 h-32 md:w-40 md:h-40 animate-[pulse-shadow_3s_ease-in-out_infinite] rounded-full">
                 <img
                   src={founderImage}
-                  alt="Pavan Nekkanti, Founder & CEO"
+                  alt="Pavan Kumar Nekkanti, Founder & CEO"
                   className="w-full h-full rounded-full object-cover border-4 border-gray-800"
                 />
               </div>
@@ -823,8 +823,7 @@ const About = () => {
                 AI Engineer @NYX
               </p>
               <p className="text-xl text-gray-300 leading-relaxed">
-                "Our mission is to empower every student with the skills and confidence to build their future in technology, making quality Python education accessible across South India."
-              </p>
+"Our mission is to empower every student with the skills and confidence to build their future in AI, while making quality tech education accessible across South India."              </p>
             </div>
           </div>
         </div>
