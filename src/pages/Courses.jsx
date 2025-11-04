@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 // ----- ADDED IMPORTS -----
 import pythonBasicPdf from '../assets/PythonBasic.pdf';
 import pythonAdvancePdf from '../assets/PythonAdvance.pdf';
-import mlInternPdf from '../assets/ML-intern.pdf';
+import mlInternPdf from '../assets/ML-Intern.pdf';
 // -------------------------
 
 const Courses = () => {
