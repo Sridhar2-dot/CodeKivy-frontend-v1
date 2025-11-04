@@ -94,7 +94,7 @@ const About = () => {
       date: 'Feb 20, 2025',
       attendees: '300+',
       image: indus,
-      description: '24-hour coding challenge with prizes'
+      description: 'AIML Fundamentals and Applications'
     }
   ];
 
