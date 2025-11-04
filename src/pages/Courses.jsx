@@ -33,7 +33,7 @@ const Courses = () => {
       color: 'from-purple-500 to-pink-500',
       level: 'Beginner',
       students: '500+',
-      about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions and OOPs concepts. Perfect for beginners starting their coding journey.',
+      about: 'Master Python programming Completely. Learn variables, data types, loops, functions and OOPs concepts. Perfect for beginners starting their coding journey.',
       pdfUrl: '/pdfs/advanced-python.pdf',
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScEiwTe9NLWH0FaVE5--sz6qP_BXMQfg2g7aLDq91ClCQsT6Q/viewform'
     },
@@ -312,7 +312,7 @@ const Courses = () => {
               Start Your Journey <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Today</span>
             </h2>
             <p className="text-xl text-gray-400 mb-10 leading-relaxed">
-              Join 800+ students learning Python with Code Kivy and unlock your potential
+              800+ students trust Code Kivy to master Python and AI unlock your potential today.
             </p>
             
            
