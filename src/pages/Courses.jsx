@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Clock, IndianRupee, FileText, CheckCircle, Sparkles, Award, Users } from 'lucide-react';
+import course1 from '../assets/course_1.jpeg'
+import course2 from '../assets/course_2.jpeg'
+import course3 from '../assets/course_3.png'
 
 const Courses = () => {
   const [visibleCourses, setVisibleCourses] = useState([]);
@@ -12,7 +15,7 @@ const Courses = () => {
       title: 'Python Basic',
       duration: '20 Days',
       price: 499,
-      image: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&q=80',
+      image: course1,
       color: 'from-blue-500 to-cyan-500',
       level: 'Beginner',
       students: '250+',
@@ -24,7 +27,7 @@ const Courses = () => {
       title: 'Python Advance',
       duration: '40 Days',
       price: 999,
-      image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&q=80',
+      image: course2,
       color: 'from-purple-500 to-pink-500',
       level: 'Intermediate',
       students: '180+',
@@ -36,7 +39,7 @@ const Courses = () => {
       title: 'Machine Learning Internship',
       duration: '60 Days',
       price: 2999,
-      image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80',
+      image: course3,
       color: 'from-orange-500 to-red-500',
       level: 'Advanced',
       students: '120+',
@@ -110,7 +113,7 @@ const Courses = () => {
               </div>
               <div className="w-px bg-gray-800"></div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-500">95%</div>
+                <div className="text-3xl font-bold text-orange-500">100%</div>
                 <div className="text-sm text-gray-500 mt-1">Success Rate</div>
               </div>
               <div className="w-px bg-gray-800"></div>
@@ -294,10 +297,7 @@ const Courses = () => {
               Join 800+ students learning Python with Code Kivy and unlock your potential
             </p>
             
-            <button className="group bg-gradient-to-r from-orange-600 to-orange-500 text-white px-10 py-5 rounded-full text-lg font-bold hover:scale-105 transition-all duration-300 shadow-2xl shadow-orange-500/30 hover:shadow-orange-500/50 inline-flex items-center gap-3">
-              <span>Explore All Courses</span>
-              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </button>
+           
           </div>
         </section>
       </div>
