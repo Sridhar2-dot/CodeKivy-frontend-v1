@@ -134,7 +134,7 @@ function ContactPage() {
         <div className="text-center mb-10 animate-[slideDown_0.8s_ease-out_both]">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/10 to-orange-600/10 border border-orange-500/20 mb-4">
             <Sparkles className="w-4 h-4 text-orange-500 animate-spin" style={{ animationDuration: '3s' }} />
-            <span className="text-sm font-semibold text-orange-500">Join 800+ Students</span>
+            <span className="text-sm font-semibold text-orange-500">800+ Students Enrolled</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">
