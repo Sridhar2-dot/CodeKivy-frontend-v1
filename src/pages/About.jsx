@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react'; // Added useCallback
 import {
   MapPin, Users, GraduationCap, BookOpen, TrendingUp, Award, Target, Sparkles,
   BadgeCheck, Calendar, ChevronLeft, ChevronRight, Star,
-  Play, Pause, Volume2, VolumeX
+  Play, Pause, Volume2, VolumeX // MODIFIED: Added Pause
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // Added motion, AnimatePresence
 import image1 from '../assets/AP.png';
 import image2 from '../assets/KN.png';
 import image3 from '../assets/TG1.png';
@@ -47,12 +47,12 @@ const About = () => {
 
   // --- Video Player State and Refs ---
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(true); // 1. Mute state starts true
   const [progress, setProgress] = useState(0);
-  const [isSeeking, setIsSeeking] = useState(false);
+  const [isSeeking, setIsSeeking] = useState(false); // <-- NEW: State for dragging
   const videoRef = useRef(null);
   const progressBarRef = useRef(null);
-  const videoContainerRef = useRef(null);
+  const videoContainerRef = useRef(null); // Ref for the video section
 
   // Events data with placeholder images
   const events = [
@@ -94,7 +94,7 @@ const About = () => {
       date: 'Feb 20, 2025',
       attendees: '300+',
       image: indus,
-      description: '24-hour coding challenge with prizes'
+      description: 'AIML Fundamentals and Applications'
     }
   ];
 
@@ -151,23 +151,23 @@ const About = () => {
 
   // --- MODIFIED: Video Player Logic ---
 
-  // 1. Sync mute state
+  // 1. This effect syncs the `isMuted` state with the video element
   useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
     videoElement.muted = isMuted;
   }, [isMuted]);
 
-  // 2. Big Play button
+  // 2. Function for the big Play button
   const handlePlay = () => {
     if (videoRef.current) {
       videoRef.current.play();
       setIsPlaying(true);
-      setIsMuted(false);
+      setIsMuted(false); // <-- Unmutes the video on play
     }
   };
 
-  // 3. Small Pause button
+  // 3. Function for the small Pause button
   const handlePause = () => {
     if (videoRef.current) {
       videoRef.current.pause();
@@ -175,40 +175,32 @@ const About = () => {
     }
   };
 
-  // 4. Mute/Unmute button
+  // 4. Function for the Mute/Unmute button
   const toggleMute = () => {
+    // This just toggles the state, the useEffect handles the rest
     setIsMuted((prev) => !prev);
   };
 
-  // 5. Update progress bar
+  // 5. --- MODIFIED: Function to update progress bar ---
   const handleTimeUpdate = () => {
+    // Only update progress if the user is NOT actively dragging the bar
     if (videoRef.current && !isSeeking) {
       const { currentTime, duration } = videoRef.current;
-      if (duration) {
+      if (duration) { // Avoid division by zero
         setProgress((currentTime / duration) * 100);
       }
     }
   };
 
-  // 6. --- NEW: Helper to get X coordinate from Mouse or Touch event ---
-  const getClientX = (e) => {
-    if (e.touches && e.touches.length > 0) {
-      return e.touches[0].clientX;
-    }
-    return e.clientX;
-  };
-
-  // 7. --- MODIFIED: Function to handle seeking (click or drag) ---
+  // 6. --- NEW: Function to handle seeking (both click and drag) ---
   const handleSeek = useCallback((e) => {
     if (!videoRef.current || !progressBarRef.current || !videoRef.current.duration) return;
 
-    const clientX = getClientX(e);
-    if (clientX === undefined) return; // Exit if no coordinate
-
     const rect = progressBarRef.current.getBoundingClientRect();
-    let clickX = clientX - rect.left;
+    let clickX = e.clientX - rect.left;
     const barWidth = rect.width;
 
+    // Clamp clickX to be within the bar's bounds
     if (clickX < 0) clickX = 0;
     if (clickX > barWidth) clickX = barWidth;
 
@@ -216,52 +208,49 @@ const About = () => {
     const { duration } = videoRef.current;
 
     videoRef.current.currentTime = duration * seekPercentage;
-    setProgress(seekPercentage * 100);
-  }, []); // Refs are stable
+    setProgress(seekPercentage * 100); // Update visual progress immediately
+  }, []); // Empty dependency array, refs are stable
 
-  // 8. --- MODIFIED: Mouse/TouchDown handler to start seeking ---
-  const handleSeekStart = useCallback((e) => {
+  // 7. --- NEW: MouseDown handler to start seeking ---
+  const handleSeekMouseDown = useCallback((e) => {
     setIsSeeking(true);
-    handleSeek(e); // Seek on initial click/touch
+    handleSeek(e); // Seek on the initial click
   }, [handleSeek]);
 
-  // 9. --- MODIFIED: Mouse/TouchMove handler (attached to window) ---
-  const handleSeekMove = useCallback((e) => {
+  // 8. --- NEW: MouseMove handler (will be attached to window) ---
+  const handleSeekMouseMove = useCallback((e) => {
     handleSeek(e); // Continuously seek while dragging
   }, [handleSeek]);
 
-  // 10. --- MODIFIED: Mouse/TouchUp handler (attached to window) ---
-  const handleSeekEnd = useCallback(() => {
+  // 9. --- NEW: MouseUp handler (will be attached to window) ---
+  const handleSeekMouseUp = useCallback(() => {
     setIsSeeking(false);
   }, []);
 
-  // 11. --- MODIFIED: Effect to attach global listeners for dragging (Mouse + Touch) ---
+  // 10. --- NEW: Effect to attach global listeners for dragging ---
   useEffect(() => {
+    // Define functions to pass to listeners
     const handleMove = (e) => {
       if (isSeeking) {
-        handleSeekMove(e);
+        handleSeekMouseMove(e);
       }
     };
     const handleUp = (e) => {
       if (isSeeking) {
-        handleSeekEnd(e);
+        handleSeekMouseUp(e);
       }
     };
 
-    // Add listeners for both
+    // Add listeners when seeking starts
     window.addEventListener('mousemove', handleMove);
     window.addEventListener('mouseup', handleUp);
-    window.addEventListener('touchmove', handleMove);
-    window.addEventListener('touchend', handleUp);
 
+    // Cleanup listeners
     return () => {
-      // Remove listeners for both
       window.removeEventListener('mousemove', handleMove);
       window.removeEventListener('mouseup', handleUp);
-      window.removeEventListener('touchmove', handleMove);
-      window.removeEventListener('touchend', handleUp);
     };
-  }, [isSeeking, handleSeekMove, handleSeekEnd]); // Re-run when these change
+  }, [isSeeking, handleSeekMouseMove, handleSeekMouseUp]); // Re-run when these change
 
   // --- End of Video Logic ---
 
@@ -302,7 +291,7 @@ const About = () => {
   const features = [
     {
       icon: <BookOpen className="w-6 h-6" />,
-      title: 'Python and AI-Focused Curriculum',
+      title: 'Python and AI Focused Curriculum',
       description: 'Comprehensive learning path designed for real-world applications'
     },
     {
@@ -346,13 +335,13 @@ const About = () => {
               <div className="absolute inset-0 -translate-x-full animate-[shimmer_3s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent animate-[fadeInUp_1s_ease-out]">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent animate-[fadeInUp_1s_ease-out]">
               About Code Kivy
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed animate-[fadeInUp_1s_ease-out_0.2s_both]">
+            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed animate-[fadeInUp_1s_ease-out_0.2s_both]">
               Empowering South India’s next generation of developers with
-              <span className="text-orange-500 font-semibold"> Python and AI excellence</span> across South India
+              <span className="text-orange-500 font-semibold"> Python and AI excellence.</span> across South India
             </p>
           </div>
 
@@ -505,13 +494,14 @@ const About = () => {
           {/* Carousel Container */}
           <div className="relative max-w-6xl mx-auto">
             {/* Main Carousel */}
+            {/* Decreased height for small screens (h-[350px] sm:h-[500px]) */}
             <div className="relative h-[350px] sm:h-[500px] rounded-3xl overflow-hidden">
               {events.map((event, index) => (
                 <div
                   key={index}
                   className={`absolute inset-0 transition-all duration-700 ease-in-out ${index === currentEventIndex
-                      ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-95 pointer-events-none'
+                    ? 'opacity-100 scale-100'
+                    : 'opacity-0 scale-95 pointer-events-none'
                     }`}
                 >
                   <div className="relative h-full rounded-3xl overflow-hidden group">
@@ -526,7 +516,7 @@ const About = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
 
                     {/* Event Content */}
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12">
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
                       {/* Event Details Badge */}
                       <div className="flex flex-wrap gap-3 mb-6">
                         <div className="flex items-center gap-2 bg-orange-500/20 backdrop-blur-md border border-orange-500/30 rounded-full px-4 py-2">
@@ -540,17 +530,17 @@ const About = () => {
                       </div>
 
                       {/* Event Title & Description */}
-                      <h3 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-3">
+                      <h3 className="text-3xl md:text-5xl font-bold text-white mb-3">
                         {event.title}
                       </h3>
-                      <p className="text-base sm:text-lg text-gray-300 mb-6 max-w-2xl">
+                      <p className="text-lg text-gray-300 mb-6 max-w-2xl">
                         {event.description}
                       </p>
 
                       {/* College Name Highlight */}
                       <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full px-6 py-3 w-fit">
                         <MapPin className="w-5 h-5 text-white" />
-                        <span className="text-white font-bold text-base sm:text-lg">{event.college}</span>
+                        <span className="text-white font-bold text-lg">{event.college}</span>
                       </div>
                     </div>
 
@@ -579,8 +569,8 @@ const About = () => {
                     key={index}
                     onClick={() => setCurrentEventIndex(index)}
                     className={`transition-all duration-300 rounded-full ${index === currentEventIndex
-                        ? 'w-12 bg-orange-500'
-                        : 'w-3 bg-gray-600 hover:bg-gray-500'
+                      ? 'w-12 bg-orange-500'
+                      : 'w-3 bg-gray-600 hover:bg-gray-500'
                       } h-3`}
                     aria-label={`Go to event ${index + 1}`}
                   />
@@ -606,7 +596,7 @@ const About = () => {
             What Our Students Say
           </h2>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Feedback from the talented developers in our community.
+            Hear from students who transformed their learning journey with Code Kivy.
           </p>
         </div>
         <div
@@ -619,7 +609,7 @@ const About = () => {
             {duplicatedFeedback.map((item, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-[90vw] max-w-[320px] sm:w-80 mx-4 bg-gradient-to-br from-gray-900 to-black border-2 border-gray-800 rounded-2xl p-6 shadow-lg"
+                className="flex-shrink-0 w-80 mx-4 bg-gradient-to-br from-gray-900 to-black border-2 border-gray-800 rounded-2xl p-6 shadow-lg"
               >
                 <div className="flex items-center mb-4">
                   <StarRating rating={item.rating} />
@@ -681,7 +671,7 @@ const About = () => {
                   <img
                     src={image}
                     alt={`Map of region ${index + 1}`}
-                    className="w-full h-48 sm:h-64 object-contain transform group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-64 object-contain transform group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
@@ -697,6 +687,7 @@ const About = () => {
       {/* --- MODIFIED: Video Section --- */}
       <section
         className="py-20 px-6 bg-black"
+      // ref={videoContainerRef} // Removed ref to prevent scroll-based play
       >
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
@@ -718,7 +709,7 @@ const About = () => {
               playsInline
               controls={false} // Hide default controls
               className="absolute inset-0 w-full h-full object-cover z-0"
-              onTimeUpdate={handleTimeUpdate}
+              onTimeUpdate={handleTimeUpdate} // <-- MODIFIED: Attach time update handler
               onLoadedMetadata={handleTimeUpdate}
             />
 
@@ -727,7 +718,7 @@ const About = () => {
               {!isPlaying && (
                 <motion.div
                   className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 cursor-pointer"
-                  onClick={handlePlay}
+                  onClick={handlePlay} // MODIFIED: Calls handlePlay
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -736,7 +727,7 @@ const About = () => {
                   <div className="text-center">
                     <div className="inline-flex p-6 bg-orange-500/20 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
                       <Play
-                        className="w-12 h-12 sm:w-16 sm:h-16 text-orange-500"
+                        className="w-16 h-16 text-orange-500"
                         fill="currentColor"
                         strokeWidth={0}
                       />
@@ -751,7 +742,7 @@ const About = () => {
             <AnimatePresence>
               {isPlaying && (
                 <>
-                  {/* --- MODIFIED: Progress Bar with Thumb --- */}
+                  {/* --- MODIFIED: Progress Bar --- */}
                   <motion.div
                     className="absolute z-20 bottom-4 left-4 right-24" // Positioned at bottom, leaves space for controls
                     initial={{ opacity: 0, y: 20 }}
@@ -761,26 +752,12 @@ const About = () => {
                   >
                     <div
                       ref={progressBarRef}
-                      onMouseDown={handleSeekStart} // <-- Use new handler
-                      onTouchStart={handleSeekStart} // <-- Add touch handler
-                      className="relative w-full h-1.5 bg-white/30 rounded-full cursor-pointer group-hover:h-2 transition-all duration-200 backdrop-blur-sm" // <-- Added 'relative'
+                      onMouseDown={handleSeekMouseDown} // <-- CHANGED from onClick
+                      className="w-full h-1.5 bg-white/30 rounded-full cursor-pointer group-hover:h-2 transition-all duration-200 backdrop-blur-sm"
                     >
-                      {/* Filled Progress */}
                       <div
                         className="h-full bg-orange-500 rounded-full"
                         style={{ width: `${progress}%` }}
-                      />
-                      {/* --- NEW DRAGGABLE THUMB --- */}
-                      <div
-                        className="absolute w-4 h-4 bg-orange-500 rounded-full top-1/2"
-                        style={{
-                          left: `${progress}%`,
-                          transform: 'translateX(-50%) translateY(-50%)',
-                          boxShadow: '0 0 5px rgba(0,0,0,0.5)',
-                          touchAction: 'none', // Prevent page scroll on drag
-                        }}
-                        onMouseDown={handleSeekStart} // <-- Use new handler
-                        onTouchStart={handleSeekStart} // <-- Add touch handler
                       />
                     </div>
                   </motion.div>
@@ -828,7 +805,7 @@ const About = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-12 text-white text-center">
             What Our Founder & CEO Says
           </h2>
-          <div className="flex flex-col md:flex-row items-center gap-8 bg-gradient-to-br from-gray-900 to-black border-1 border-gray-950 rounded-2xl p-6 md:p-12">
+          <div className="flex flex-col md:flex-row items-center gap-8 bg-gradient-to-br from-gray-900 to-black border-1 border-gray-950 rounded-2xl p-8 md:p-12">
 
             {/* --- MODIFIED: Image on Left --- */}
             <div className="flex-shrink-0">
@@ -850,7 +827,7 @@ const About = () => {
               <p className="text-lg text-orange-400 font-semibold mb-4">
                 AI Engineer @NYX
               </p>
-              <p className="flex items-center justify-center md:justify-start text-lg text-orange-400 font-semibold mb-4">
+              <p className="flex items-center text-lg text-orange-400 font-semibold mb-4">
                 <img
                   width="20"
                   height="25"
@@ -860,7 +837,7 @@ const About = () => {
                 <span className="ml-2">Bangalore</span>
               </p>
               <p className="text-xl text-gray-300 leading-relaxed">
-                "Our mission is to empower every student with the skills and confidence to build their future in AI, while making quality tech education accessible across South India."             </p>
+                "Our mission is to empower every student with the skills and confidence to build their future in AI, while making quality tech education accessible across South India."              </p>
             </div>
           </div>
         </div>
