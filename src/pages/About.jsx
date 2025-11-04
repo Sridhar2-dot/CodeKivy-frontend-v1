@@ -13,7 +13,7 @@ import msmeImage from '../assets/MSME.png';
 
 // --- IMPORT YOUR VIDEO HERE ---
 // Make sure this path is correct
-import aboutvideo from '../assets/aboutvideo.mp4'; 
+import aboutvideo from '../assets/aboutvideo.MP4'; 
 
 // --- Helper component for Star Ratings ---
 const StarRating = ({ rating }) => {
