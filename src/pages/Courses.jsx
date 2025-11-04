@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Clock, IndianRupee, FileText, CheckCircle, Sparkles, Award, Users } from 'lucide-react';
-import course1 from '../assets/course_1.jpeg'
-import course2 from '../assets/course_2.jpeg'
-import course3 from '../assets/course_3.png'
+import course1 from '../assets/Generated Image November 05, 2025 - 1_41AM.png'
+import course2 from '../assets/Generated Image November 05, 2025 - 1_48AM.png'
+import course3 from '../assets/111.png'
 import { Link } from 'react-router-dom';
 
 const Courses = () => {
@@ -19,8 +19,8 @@ const Courses = () => {
       image: course1,
       color: 'from-blue-500 to-cyan-500',
       level: 'Beginner',
-      students: '250+',
-      about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions, and object-oriented programming. Perfect for complete beginners starting their coding journey.',
+      students: '200+',
+      about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions. Perfect for school students starting their coding journey.',
       pdfUrl: '/pdfs/python-basics.pdf',
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdMIr3sUbDapsx7FWP6f147prEefoU55VAWmWNh4wQ_baBeow/viewform'
     },
@@ -31,9 +31,9 @@ const Courses = () => {
       price: 999,
       image: course2,
       color: 'from-purple-500 to-pink-500',
-      level: 'Intermediate',
-      students: '180+',
-      about: 'Take your Python skills to the next level. Dive deep into advanced concepts, data structures, algorithms, web frameworks, and API development. Build real-world applications.',
+      level: 'Beginner',
+      students: '500+',
+      about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions and OOPs concepts. Perfect for beginners starting their coding journey.',
       pdfUrl: '/pdfs/advanced-python.pdf',
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScEiwTe9NLWH0FaVE5--sz6qP_BXMQfg2g7aLDq91ClCQsT6Q/viewform'
     },
@@ -106,7 +106,7 @@ const Courses = () => {
               Our Courses
             </h1>
             <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Choose your path to Python mastery with industry-leading curriculum
+              Choose your path to AI mastery with industry-leading curriculum
             </p>
 
             {/* Stats Bar */}
