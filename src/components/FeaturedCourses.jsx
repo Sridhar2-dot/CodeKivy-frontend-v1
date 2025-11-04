@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Clock, BarChart3, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
-import course1 from '../assets/course_1.jpeg'
+import course1 from '../assets/Generated%20Image%20November%2005%2C%202025%20-%201_41AM.png'
 import course2 from '../assets/course_2.jpeg'
 import course3 from '../assets/course_3.png'
 
