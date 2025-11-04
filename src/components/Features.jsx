@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Video, DollarSign, Code, Briefcase, FileText, MessageCircle } from 'lucide-react';
+import {
+  Video, DollarSign, Code, Briefcase, FileText, MessageCircle,
+  ChevronLeft, ChevronRight // 1. ADDED ICONS
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import OrangeGlowImage from '../assets/OrangeGlow.png';
 
@@ -37,7 +40,7 @@ const features = [
     description:
       'Master in-demand skills with our industry-aligned syllabus. Every lesson is designed to make you immediately employable.',
     icon: Briefcase,
-    bgGradient: 'from-black/70 via-black/60 to-black/70',
+    bgGradient: 'from-black/7img/70 via-black/60 to-black/70',
     iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-500',
     image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
   },
@@ -73,6 +76,15 @@ const Features = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, [isPaused]);
+
+  // 2. ADDED MANUAL NAVIGATION HANDLERS
+  const nextCard = () => {
+    setCenterIndex((prev) => (prev + 1) % features.length);
+  };
+
+  const prevCard = () => {
+    setCenterIndex((prev) => (prev - 1 + features.length) % features.length);
+  };
 
   const getCardStyle = (index) => {
     const total = features.length;
@@ -124,9 +136,9 @@ const Features = () => {
         {/* Carousel */}
         <div className="relative z-10 mt-16 sm:mt-20 lg:mt-24">
           <div
-            className="relative h-[500px] flex items-center justify-center"
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
+            // 3. RESPONSIVE HEIGHT
+            className="relative h-[450px] sm:h-[500px] flex items-center justify-center"
+            // --- HANDLERS REMOVED FROM HERE ---
           >
             <AnimatePresence mode="sync">
               {features.map((feature, i) => {
@@ -137,9 +149,14 @@ const Features = () => {
                   <motion.div
                     key={i}
                     className="absolute"
+                    // --- HANDLERS ADDED HERE ---
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
+                    // ---
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{
-                      x: isCenter ? 0 : isLeft ? '-85%' : '85%',
+                      // 3. RESPONSIVE X-POSITION
+                      x: isCenter ? 0 : isLeft ? '-80%' : '80%',
                       scale: isCenter ? 1 : 0.7,
                       opacity: isCenter ? 1 : 0.5,
                       zIndex: isCenter ? 30 : isLeft ? 10 : 20,
@@ -150,8 +167,11 @@ const Features = () => {
                     style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
                   >
                     <motion.div
+                      // 3. RESPONSIVE CARD SIZE
                       className={`relative rounded-3xl overflow-hidden ${
-                        isCenter ? 'w-[400px] h-[450px]' : 'w-[280px] h-[350px]'
+                        isCenter
+                          ? 'w-[320px] h-[400px] sm:w-[400px] sm:h-[450px]' // smaller on mobile
+                          : 'w-[240px] h-[300px] sm:w-[280px] sm:h-[350px]' // smaller on mobile
                       } transition-all duration-700`}
                       whileHover={!isCenter ? { scale: 0.75 } : {}}
                       onClick={() => !isCenter && setCenterIndex(i)}
@@ -175,11 +195,12 @@ const Features = () => {
                           isCenter
                             ? 'border-orange-500/50 shadow-2xl shadow-orange-500/20'
                             : 'border-gray-700/50'
-                        } rounded-3xl p-8 flex flex-col justify-between text-white`}
+                        } rounded-3xl p-6 sm:p-8 flex flex-col justify-between text-white`} // 3. RESPONSIVE PADDING
                       >
                         {/* Icon */}
                         <motion.div
-                          className={`flex h-16 w-16 items-center justify-center rounded-2xl ${feature.iconBg}`}
+                          // 3. RESPONSIVE ICON BG
+                          className={`flex items-center justify-center rounded-2xl ${feature.iconBg} h-12 w-12 sm:h-16 sm:w-16`}
                           animate={
                             isCenter
                               ? { rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }
@@ -191,21 +212,24 @@ const Features = () => {
                             ease: 'easeInOut',
                           }}
                         >
-                          <feature.icon className="h-8 w-8 text-white" />
+                          {/* 3. RESPONSIVE ICON SIZE */}
+                          <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                         </motion.div>
 
                         {/* Text */}
                         <div className="flex-1 mt-6">
                           <h3
+                            // 3. RESPONSIVE TEXT
                             className={`font-bold leading-tight ${
-                              isCenter ? 'text-2xl' : 'text-xl'
+                              isCenter ? 'text-xl sm:text-2xl' : 'text-lg sm:text-xl'
                             }`}
                           >
                             {feature.name}
                           </h3>
                           <motion.p
+                            // 3. RESPONSIVE TEXT
                             className={`mt-4 text-gray-100 ${
-                              isCenter ? 'text-base' : 'text-sm'
+                              isCenter ? 'text-sm sm:text-base' : 'text-xs sm:text-sm'
                             }`}
                             animate={isCenter ? { opacity: 1 } : { opacity: 0.8 }}
                           >
@@ -244,19 +268,44 @@ const Features = () => {
             </AnimatePresence>
           </div>
 
-          {/* Navigation Dots */}
-          <div className="flex justify-center gap-2 mt-12">
-            {features.map((_, index) => (
-              <motion.button
-                key={index}
-                onClick={() => setCenterIndex(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  centerIndex === index ? 'w-8 bg-orange-500' : 'w-2 bg-gray-600'
-                }`}
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-              />
-            ))}
+          {/* 4. MODIFIED: Navigation Dots + Arrows */}
+          <div className="flex justify-center items-center gap-4 mt-12">
+            
+            {/* Left Arrow */}
+            <motion.button
+              onClick={prevCard}
+              className="text-gray-400 hover:text-white transition-colors p-2 rounded-full"
+              whileHover={{ scale: 1.2, backgroundColor: 'rgba(255,255,255,0.1)' }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            </motion.button>
+
+            {/* Dots */}
+            <div className="flex justify-center gap-2">
+              {features.map((_, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => setCenterIndex(index)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    centerIndex === index ? 'w-8 bg-orange-500' : 'w-2 bg-gray-600'
+                  }`}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                />
+              ))}
+            </div>
+
+            {/* Right Arrow */}
+            <motion.button
+              onClick={nextCard}
+              className="text-gray-400 hover:text-white transition-colors p-2 rounded-full"
+              whileHover={{ scale: 1.2, backgroundColor: 'rgba(255,255,255,0.1)' }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+            </motion.button>
+
           </div>
         </div>
       </div>
