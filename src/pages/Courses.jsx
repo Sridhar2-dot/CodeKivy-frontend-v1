@@ -3,6 +3,7 @@ import { ArrowRight, Clock, IndianRupee, FileText, CheckCircle, Sparkles, Award,
 import course1 from '../assets/course_1.jpeg'
 import course2 from '../assets/course_2.jpeg'
 import course3 from '../assets/course_3.png'
+import { Link } from 'react-router-dom';
 
 const Courses = () => {
   const [visibleCourses, setVisibleCourses] = useState([]);
@@ -20,7 +21,8 @@ const Courses = () => {
       level: 'Beginner',
       students: '250+',
       about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions, and object-oriented programming. Perfect for complete beginners starting their coding journey.',
-      pdfUrl: '/pdfs/python-basics.pdf'
+      pdfUrl: '/pdfs/python-basics.pdf',
+      registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdMIr3sUbDapsx7FWP6f147prEefoU55VAWmWNh4wQ_baBeow/viewform'
     },
     {
       id: 2,
@@ -32,7 +34,8 @@ const Courses = () => {
       level: 'Intermediate',
       students: '180+',
       about: 'Take your Python skills to the next level. Dive deep into advanced concepts, data structures, algorithms, web frameworks, and API development. Build real-world applications.',
-      pdfUrl: '/pdfs/advanced-python.pdf'
+      pdfUrl: '/pdfs/advanced-python.pdf',
+      registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScEiwTe9NLWH0FaVE5--sz6qP_BXMQfg2g7aLDq91ClCQsT6Q/viewform'
     },
     {
       id: 3,
@@ -44,7 +47,8 @@ const Courses = () => {
       level: 'Advanced',
       students: '120+',
       about: 'Become a Machine Learning expert. Learn algorithms, neural networks, deep learning, and AI applications. Work on real industry projects and build your ML portfolio.',
-      pdfUrl: '/pdfs/machine-learning.pdf'
+      pdfUrl: '/pdfs/machine-learning.pdf',
+      registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdXTXnMbHC1vXqFSYIn0gSBlX3jx-R9kr8rZqiYTv8CAOfstA/viewform'
     }
   ];
 
@@ -175,40 +179,51 @@ const Courses = () => {
                       {course.students}
                     </div>
 
-                    {/* Bottom Info */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black to-transparent">
-                      <div className="flex items-center gap-2 text-orange-400 text-sm">
-                        <Award className="w-4 h-4" />
-                        <span>Certificate Included</span>
+                    {/* Bottom Info - Left for 1st & 3rd, Right for 2nd */}
+                    {index === 1 ? (
+                      // 2nd course - Right side
+                      <div className="absolute bottom-0 right-0 p-3 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500 bg-gradient-to-l from-black to-transparent">
+                        <div className="flex items-center gap-1.5 text-orange-400 text-xs whitespace-nowrap">
+                          <Award className="w-3.5 h-3.5" />
+                          <span>Certificate Included</span>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      // 1st & 3rd course - Left side
+                      <div className="absolute bottom-0 left-0 p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black to-transparent">
+                        <div className="flex items-center gap-1.5 text-orange-400 text-xs">
+                          <Award className="w-3.5 h-3.5" />
+                          <span>Certificate Included</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Hover Popup */}
+                  {/* Hover Popup - Hidden on mobile */}
                   <div 
-                    className={`absolute ${index % 2 === 0 ? 'right-0' : 'left-0'} top-1/2 transform -translate-y-1/2 
+                    className={`hidden lg:block absolute ${index % 2 === 0 ? 'right-0' : 'left-0'} top-1/2 transform -translate-y-1/2 
                     ${index % 2 === 0 ? 'translate-x-[105%]' : '-translate-x-[105%]'} 
-                    w-80 z-20 
+                    w-72 z-20 
                     opacity-0 pointer-events-none scale-95
                     group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto group-hover:scale-100
                     transition-all duration-500 ease-out`}
                   >
-                    <div className="bg-gradient-to-br from-gray-900 to-black border-2 border-orange-500/50 rounded-2xl p-6 shadow-2xl backdrop-blur-sm">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className={`p-2.5 rounded-xl bg-gradient-to-br ${course.color} shadow-lg`}>
-                          <FileText className="w-5 h-5 text-white" />
+                    <div className="bg-gradient-to-br from-gray-900 to-black border-2 border-orange-500/50 rounded-2xl p-5 shadow-2xl backdrop-blur-sm">
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <div className={`p-2 rounded-xl bg-gradient-to-br ${course.color} shadow-lg`}>
+                          <FileText className="w-4 h-4 text-white" />
                         </div>
-                        <h4 className="text-lg font-bold text-white">About Course</h4>
+                        <h4 className="text-base font-bold text-white">About Course</h4>
                       </div>
-                      <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                      <p className="text-gray-400 text-xs leading-relaxed mb-3">
                         {course.about}
                       </p>
-                      <div className="pt-4 border-t border-gray-800 flex items-center justify-between">
+                      <div className="pt-3 border-t border-gray-800 flex items-center justify-between">
                         <span className="text-xs text-gray-500 flex items-center gap-1">
                           <Sparkles className="w-3 h-3" />
                           Hover to view
                         </span>
-                        <CheckCircle className="w-5 h-5 text-orange-500" />
+                        <CheckCircle className="w-4 h-4 text-orange-500" />
                       </div>
                     </div>
                     {/* Arrow indicator */}
@@ -257,12 +272,15 @@ const Courses = () => {
 
                     {/* Buttons */}
                     <div className="flex flex-wrap gap-4 pt-4">
-                      <button 
+                      <a 
+                        href={course.registerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className={`group/btn flex items-center gap-2 bg-gradient-to-r ${course.color} text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105 transition-all duration-300`}
                       >
                         <span>Register Now</span>
                         <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      </a>
                       
                       <button 
                         onClick={() => window.open(course.pdfUrl, '_blank')}
