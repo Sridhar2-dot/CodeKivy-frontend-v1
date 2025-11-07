@@ -274,7 +274,7 @@ const Navbar = () => {
               {/* Additional Info */}
               <div className="mt-6 text-center" style={{ animation: 'fadeIn 0.6s ease-out 0.6s both' }}>
                 <p className="text-sm text-gray-500">
-                  Join 10,000+ students learning with us
+                  Join 800+ students learning with us
                 </p>
               </div>
             </div>
