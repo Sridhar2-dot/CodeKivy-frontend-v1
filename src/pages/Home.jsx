@@ -3,6 +3,7 @@ import { MessageCircle, Mic } from 'lucide-react';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import FeaturedCourses from '../components/FeaturedCourses';
+import ToolButtons from '../components/ToolButtons';
 import HowItWorks from '../components/HowItWorks';
 import ChatWindow from '../components/ChatWindow';
 import { VoiceAgentOverlay } from '../components/VoiceAgentOverlay'; // 1. Import new voice component
@@ -51,6 +52,7 @@ function Home() {
       {/* Page content (no change) */}
       <Hero />
       <FeaturedCourses />
+      <ToolButtons />
       <Features />
       <HowItWorks />
 
