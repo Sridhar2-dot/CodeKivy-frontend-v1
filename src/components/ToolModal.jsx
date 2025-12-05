@@ -8,15 +8,15 @@ export const ToolModal = ({ tool, onClose }) => {
   // Prevent body scroll when modal is open and handle Escape key
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    
+
     const handleEscape = (e) => {
       if (e.key === 'Escape') {
         onClose();
       }
     };
-    
+
     window.addEventListener('keydown', handleEscape);
-    
+
     return () => {
       document.body.style.overflow = 'unset';
       window.removeEventListener('keydown', handleEscape);
@@ -41,14 +41,14 @@ export const ToolModal = ({ tool, onClose }) => {
   }, [isLoading]);
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
       style={{
         animation: 'fadeIn 0.3s ease-out',
       }}
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-black/95 backdrop-blur-xl rounded-2xl shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col relative border border-orange-500/20"
         style={{
           animation: 'zoomIn 0.3s ease-out',
@@ -94,12 +94,12 @@ export const ToolModal = ({ tool, onClose }) => {
             sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-top-navigation allow-presentation"
             onLoad={handleIframeLoad}
           />
-          
+
           {/* Loading Overlay */}
           {isLoading && (
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-10">
               <div className="text-center">
-                <div className="w-12 h-12 border-4 border-orange-500/30 border-t-orange-500 rounded-full animate-spin mx-auto mb-4"></div>
+                <div className="loader mx-auto mb-4"></div>
                 <p className="text-gray-400 text-sm">Loading {tool.name}...</p>
                 {loadError && (
                   <p className="text-orange-400 text-xs mt-2">Taking longer than expected...</p>
@@ -162,6 +162,31 @@ export const ToolModal = ({ tool, onClose }) => {
             opacity: 1;
             transform: scale(1);
           }
+        }
+
+        /* Custom Loader Animation */
+        .loader {
+          width: 50px;
+          aspect-ratio: 1;
+          display: grid;
+          animation: l14 4s infinite;
+        }
+        .loader::before,
+        .loader::after {    
+          content: "";
+          grid-area: 1/1;
+          border: 8px solid;
+          border-radius: 50%;
+          border-color: #f97316 #f97316 #0000 #0000; /* Orange color */
+          mix-blend-mode: darken;
+          animation: l14 1s infinite linear;
+        }
+        .loader::after {
+          border-color: #0000 #0000 #ffffff #ffffff; /* White color */
+          animation-direction: reverse;
+        }
+        @keyframes l14{ 
+          100%{transform: rotate(1turn)}
         }
       `}</style>
     </div>
