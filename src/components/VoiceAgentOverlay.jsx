@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 // 1. Mic and Square are now both used
-import { X, Mic, Square, Loader2 } from 'lucide-react'; 
+import { X, Mic, Square, Loader2 } from 'lucide-react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 
 import animation from '../assets/animation.mp4'
 import voiceSound from '../assets/Voice.mp3';
-import blob from '../assets/Blob.gif' // This is the main button graphic
+
 
 // Helper to decode Base64 audio
 const b64toBlob = (b64Data, contentType = 'audio/wav', sliceSize = 512) => {
@@ -44,7 +44,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
   // Environment variable for API URL
   // const API_URL = 'https://code-kivy-backend-v1.vercel.app';
 
-    // Environment variable for API URL
+  // Environment variable for API URL
   const API_URL = 'https://code-kivy-backend-v1.vercel.app';
 
   // Main voice processing function
@@ -87,7 +87,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
 
       console.log('🔊 Decoding audio response...');
       const audioBlob = b64toBlob(data.audio_response_b64, 'audio/wav');
-      
+
       if (!audioBlob) {
         throw new Error('Failed to decode audio');
       }
@@ -96,7 +96,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
 
       if (audioRef.current) {
         audioRef.current.src = audioUrl;
-        
+
         audioRef.current.onloadeddata = () => {
           console.log('✅ Audio loaded, playing...');
           audioRef.current.play().catch(err => {
@@ -159,13 +159,13 @@ export const VoiceAgentOverlay = ({ onClose }) => {
       setStatusText('Processing...');
     } else if (!isProcessing && !isBotSpeaking) {
       console.log('🎙️ Starting recording...');
-      
+
       // Hide GIF and mark as started
       if (!hasStarted) {
         setHasStarted(true);
       }
       setShowGif(false);
-      
+
       setTranscript('');
       setBotResponse('');
       setError(null);
@@ -182,7 +182,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black backdrop-blur-sm z-[100] flex items-center justify-center p-4">
       <div className="bg-black backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-md p-8 flex flex-col items-center gap-4 relative border border-gray-700/50">
-        
+
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -194,12 +194,12 @@ export const VoiceAgentOverlay = ({ onClose }) => {
 
         {/* Main Content Area */}
         <div className="w-full flex flex-col items-center gap-6">
-          
+
           {/* Hello GIF - Shows only before first interaction */}
           {showGif && (
             <div className="flex items-center justify-center mb-4 w-full">
-              <video 
-                src={animation} 
+              <video
+                src={animation}
                 autoPlay
                 loop={false}
                 playsInline
@@ -220,7 +220,7 @@ export const VoiceAgentOverlay = ({ onClose }) => {
 
           {/* Voice Visualizer / Mic Button Container */}
           <div className="relative w-40 h-40 flex items-center justify-center">
-            
+
             {/* Wave Animations (This function now returns null) */}
             {getWaveAnimation()}
 
@@ -231,54 +231,32 @@ export const VoiceAgentOverlay = ({ onClose }) => {
               disabled={isProcessing || isBotSpeaking}
               className={`
                 relative z-10 transition-all duration-300
-                flex items-center justify-center overflow-hidden shadow-2xl disabled:opacity-70
+                flex items-center justify-center shadow-2xl disabled:opacity-70
+                w-24 h-24 rounded-full
                 
-                ${
-                  isRecording
-                    ? 'w-32 h-32' // State: Recording. Larger, no bg, no rounded.
-                    : 'w-24 h-24 rounded-full' // State: Idle, Processing, or Speaking.
+                ${isProcessing || isBotSpeaking
+                  ? 'cursor-wait' // Removed bg-gradient
+                  : ''
                 }
                 
-                ${
-                  isProcessing || isBotSpeaking
-                    ? 'bg-gradient-to-br from-gray-700 to-gray-800 cursor-wait' // BG for loaders
-                    : ''
+                ${isRecording
+                  ? 'bg-gradient-to-br from-red-500 to-pink-600 animate-pulse-slow scale-110 overflow-hidden' // Keep overflow hidden for recording state only if needed, or remove if not. Keeping bg for recording.
+                  : ''
                 }
                 
-                ${
-                  isRecording
-                    ? 'scale-110' // Scale up the blob
-                    : ''
-                }
-                
-                ${
-                  !isRecording && !isProcessing && !isBotSpeaking
-                    ? 'bg-gradient-to-br from-green-500 via-blue-500 to-purple-600 hover:scale-110 hover:shadow-[0_0_40px_rgba(168,85,247,0.6)]' // BG for Mic
-                    : ''
+                ${!isRecording && !isProcessing && !isBotSpeaking
+                  ? 'bg-gradient-to-br from-green-500 via-blue-500 to-purple-600 hover:scale-110 hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] overflow-hidden' // Keep bg and overflow for idle
+                  : ''
                 }
               `}
               aria-label={isRecording ? 'Stop recording' : 'Start recording'}
             >
               {isProcessing ? (
-                <Loader2 size={36} className="text-white animate-spin" />
+                <div className="loader"></div>
               ) : isBotSpeaking ? (
-                <Loader2 size={36} className="text-white animate-spin" />
+                <div className="loader"></div>
               ) : isRecording ? (
-                // 2. MODIFIED: Added a wrapper and an overlay for the stop button
-                <>
-                  <img 
-                    src={blob} 
-                    alt="Recording animation" 
-                    className="w-full h-full object-cover" // Fills the new w-32 h-32
-                  />
-                  {/* This is the new "Stop" button visual */}
-                  <div 
-                    className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-xs"
-                    aria-hidden="true" // It's just a visual cue, parent button handles click
-                  >
-                    <Square size={32} className="text-white" fill="white" />
-                  </div>
-                </>
+                <Square size={32} className="text-white" fill="white" />
               ) : (
                 <Mic size={32} className="text-white" />
               )}
@@ -453,6 +431,37 @@ export const VoiceAgentOverlay = ({ onClose }) => {
         }
         *::-webkit-scrollbar-thumb:hover {
           background: rgba(156, 163, 175, 0.5);
+        }
+
+        /* Custom Loader Animation */
+        .loader {
+          width: 50px;
+          aspect-ratio: 1;
+          box-shadow: 0 0 0 3px #fff inset;
+          border-radius: 50%;
+          position: relative;
+          animation: l11 7s infinite;
+        }
+        .loader:before,
+        .loader:after {
+          content: "";
+          position: absolute;
+          top: calc(100% + 3px);
+          left: calc(50% - 12.5px);
+          box-shadow: inherit;
+          width: 25px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          transform-origin: 50% -28px;
+          animation: l11 1.5s infinite;
+        }
+        .loader:after {
+          animation-delay: -0.75s;
+        }
+        @keyframes l11 {
+          100% {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </div>
