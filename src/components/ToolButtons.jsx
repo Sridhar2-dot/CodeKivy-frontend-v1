@@ -4,6 +4,7 @@ import { ToolModal } from './ToolModal';
 // Import tool images
 import tool1 from '../assets/tool_interviewer_img.png';
 import tool2 from '../assets/tool_reviewer_img.png';
+import tool3 from '../assets/AIstorygenerator.png';
 
 const ToolButtons = () => {
   const [hoveredTool, setHoveredTool] = useState(null);
@@ -19,6 +20,13 @@ const ToolButtons = () => {
     },
     {
       id: 2,
+      image: tool3,
+      link: 'https://ai-story-codekivy.netlify.app/',
+      name: 'AI Story Generator',
+      description: 'Generate creative stories with AI'
+    },
+    {
+      id: 3,
       image: tool2,
       link: 'https://codereview-codekivy.netlify.app/',
       name: 'Code Reviewer',
@@ -40,10 +48,10 @@ const ToolButtons = () => {
       {/* Content Container */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-20">
         {/* Tools Grid */}
-        <div className="mx-auto mt-8 sm:mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 max-w-5xl">
+        <div className="mx-auto mt-8 sm:mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 max-w-6xl">
           {tools.map((tool, index) => {
             const isHovered = hoveredTool === tool.id;
-            
+
             return (
               <div
                 key={tool.id}
@@ -73,114 +81,114 @@ const ToolButtons = () => {
                       borderColor: isHovered ? 'rgba(249, 115, 22, 0.6)' : 'rgba(249, 115, 22, 0.3)',
                       borderWidth: isHovered ? '2px' : '2px',
                       transform: isHovered ? 'translateY(-12px) scale(1.05)' : 'translateY(0) scale(1)',
-                      boxShadow: isHovered 
-                        ? '0 25px 50px -12px rgba(249, 115, 22, 0.5), 0 0 0 1px rgba(249, 115, 22, 0.2)' 
+                      boxShadow: isHovered
+                        ? '0 25px 50px -12px rgba(249, 115, 22, 0.5), 0 0 0 1px rgba(249, 115, 22, 0.2)'
                         : '0 10px 25px -5px rgba(249, 115, 22, 0.2)',
                     }}
                   >
-                  {/* Animated Gradient Border on Hover */}
-                  {isHovered && (
-                    <div className="absolute inset-0 rounded-2xl p-[2px] opacity-100 transition-opacity duration-500">
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 animate-[spin_3s_linear_infinite]"></div>
-                      <div className="absolute inset-[2px] rounded-2xl bg-gradient-to-br from-gray-950 to-gray-900"></div>
-                    </div>
-                  )}
+                    {/* Animated Gradient Border on Hover */}
+                    {isHovered && (
+                      <div className="absolute inset-0 rounded-2xl p-[2px] opacity-100 transition-opacity duration-500">
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 animate-[spin_3s_linear_infinite]"></div>
+                        <div className="absolute inset-[2px] rounded-2xl bg-gradient-to-br from-gray-950 to-gray-900"></div>
+                      </div>
+                    )}
 
-                  {/* Animated Particles - Always visible but more on hover */}
-                  {[...Array(6)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="absolute w-1.5 h-1.5 bg-orange-500 rounded-full animate-[float_2s_ease-in-out_infinite]"
-                      style={{
-                        left: `${10 + i * 15}%`,
-                        top: `${15 + (i % 3) * 30}%`,
-                        animationDelay: `${i * 0.4}s`,
-                        opacity: isHovered ? 1 : 0.4,
-                      }}
-                    ></div>
-                  ))}
-
-                  {/* Tool Image */}
-                  <div className="relative w-full h-3/4 flex items-center justify-center p-4 sm:p-6 z-10">
-                    {tool.image ? (
-                      <img 
-                        src={tool.image} 
-                        alt={tool.name}
-                        className="w-full h-full object-contain transition-all duration-700 drop-shadow-2xl"
+                    {/* Animated Particles - Always visible but more on hover */}
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-1.5 h-1.5 bg-orange-500 rounded-full animate-[float_2s_ease-in-out_infinite]"
                         style={{
-                          transform: isHovered ? 'scale(1.15) rotate(2deg)' : 'scale(1) rotate(0deg)',
-                          filter: isHovered ? 'brightness(1.2) contrast(1.1)' : 'brightness(1) contrast(1)',
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          const fallback = e.target.nextElementSibling;
-                          if (fallback) fallback.style.display = 'flex';
-                        }}
-                      />
-                    ) : null}
-                    {/* Fallback if image doesn't exist */}
-                    <div 
-                      className={`${tool.image ? 'hidden' : 'flex'} items-center justify-center w-full h-full text-gray-500 text-lg font-semibold`}
-                    >
-                      {tool.name}
-                    </div>
-                  </div>
-
-                  {/* Click Button/CTA - Always visible */}
-                  <div className="absolute bottom-4 left-4 right-4 z-20">
-                    <div
-                      className="group/btn relative flex items-center justify-center gap-2 w-full rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 overflow-hidden"
-                      style={{
-                        backgroundColor: isHovered ? 'rgba(249, 115, 22, 0.95)' : 'rgba(249, 115, 22, 0.8)',
-                        transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
-                        boxShadow: isHovered 
-                          ? '0 10px 20px -5px rgba(249, 115, 22, 0.6)' 
-                          : '0 5px 15px -5px rgba(249, 115, 22, 0.4)',
-                      }}
-                    >
-                      <span className="relative z-10 flex items-center gap-2">
-                        {isHovered ? 'Explore Tool' : 'Click to Explore'}
-                        {isHovered ? (
-                          <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                        ) : (
-                          <ArrowRight className="h-4 w-4 transition-transform duration-300" />
-                        )}
-                      </span>
-                      {/* Shine effect on button */}
-                      <div 
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full transition-transform duration-1000"
-                        style={{
-                          transform: isHovered ? 'translateX(100%)' : 'translateX(-100%)',
+                          left: `${10 + i * 15}%`,
+                          top: `${15 + (i % 3) * 30}%`,
+                          animationDelay: `${i * 0.4}s`,
+                          opacity: isHovered ? 1 : 0.4,
                         }}
                       ></div>
-                    </div>
-                  </div>
+                    ))}
 
-                  {/* Tool Name Badge */}
-                  <div className="absolute top-4 left-4 z-20">
+                    {/* Tool Image */}
+                    <div className="relative w-full h-3/4 flex items-center justify-center p-4 sm:p-6 z-10">
+                      {tool.image ? (
+                        <img
+                          src={tool.image}
+                          alt={tool.name}
+                          className="w-full h-full object-contain transition-all duration-700 drop-shadow-2xl"
+                          style={{
+                            transform: isHovered ? 'scale(1.15) rotate(2deg)' : 'scale(1) rotate(0deg)',
+                            filter: isHovered ? 'brightness(1.2) contrast(1.1)' : 'brightness(1) contrast(1)',
+                          }}
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            const fallback = e.target.nextElementSibling;
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      {/* Fallback if image doesn't exist */}
+                      <div
+                        className={`${tool.image ? 'hidden' : 'flex'} items-center justify-center w-full h-full text-gray-500 text-lg font-semibold`}
+                      >
+                        {tool.name}
+                      </div>
+                    </div>
+
+                    {/* Click Button/CTA - Always visible */}
+                    <div className="absolute bottom-4 left-4 right-4 z-20">
+                      <div
+                        className="group/btn relative flex items-center justify-center gap-2 w-full rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 overflow-hidden"
+                        style={{
+                          backgroundColor: isHovered ? 'rgba(249, 115, 22, 0.95)' : 'rgba(249, 115, 22, 0.8)',
+                          transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+                          boxShadow: isHovered
+                            ? '0 10px 20px -5px rgba(249, 115, 22, 0.6)'
+                            : '0 5px 15px -5px rgba(249, 115, 22, 0.4)',
+                        }}
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          {isHovered ? 'Explore Tool' : 'Click to Explore'}
+                          {isHovered ? (
+                            <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                          ) : (
+                            <ArrowRight className="h-4 w-4 transition-transform duration-300" />
+                          )}
+                        </span>
+                        {/* Shine effect on button */}
+                        <div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full transition-transform duration-1000"
+                          style={{
+                            transform: isHovered ? 'translateX(100%)' : 'translateX(-100%)',
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    {/* Tool Name Badge */}
+                    <div className="absolute top-4 left-4 z-20">
+                      <div
+                        className="px-3 py-1.5 rounded-lg backdrop-blur-sm transition-all duration-300"
+                        style={{
+                          backgroundColor: isHovered ? 'rgba(249, 115, 22, 0.2)' : 'rgba(0, 0, 0, 0.4)',
+                          border: `1px solid ${isHovered ? 'rgba(249, 115, 22, 0.5)' : 'rgba(249, 115, 22, 0.3)'}`,
+                        }}
+                      >
+                        <span className="text-xs font-semibold text-orange-400">{tool.name}</span>
+                      </div>
+                    </div>
+
+                    {/* Gradient Overlay */}
                     <div
-                      className="px-3 py-1.5 rounded-lg backdrop-blur-sm transition-all duration-300"
-                      style={{
-                        backgroundColor: isHovered ? 'rgba(249, 115, 22, 0.2)' : 'rgba(0, 0, 0, 0.4)',
-                        border: `1px solid ${isHovered ? 'rgba(249, 115, 22, 0.5)' : 'rgba(249, 115, 22, 0.3)'}`,
-                      }}
-                    >
-                      <span className="text-xs font-semibold text-orange-400">{tool.name}</span>
-                    </div>
-                  </div>
-
-                  {/* Gradient Overlay */}
-                  <div 
-                    className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent transition-opacity duration-500 pointer-events-none"
-                    style={{ opacity: isHovered ? 0.3 : 0.5 }}
-                  ></div>
-
-                  {/* Shine effect */}
-                  {isHovered && (
-                    <div 
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-[shimmer_2s_ease-in-out_infinite] pointer-events-none"
+                      className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent transition-opacity duration-500 pointer-events-none"
+                      style={{ opacity: isHovered ? 0.3 : 0.5 }}
                     ></div>
-                  )}
+
+                    {/* Shine effect */}
+                    {isHovered && (
+                      <div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-[shimmer_2s_ease-in-out_infinite] pointer-events-none"
+                      ></div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -191,9 +199,9 @@ const ToolButtons = () => {
 
       {/* Tool Modal */}
       {selectedTool && (
-        <ToolModal 
-          tool={selectedTool} 
-          onClose={() => setSelectedTool(null)} 
+        <ToolModal
+          tool={selectedTool}
+          onClose={() => setSelectedTool(null)}
         />
       )}
 
