@@ -14,21 +14,21 @@ const ToolButtons = () => {
     {
       id: 1,
       image: tool1,
-      link: 'https://ai-interviewer-codekivy.netlify.app/',
+      link: 'https://aiinterviewer-codekivy.netlify.app/',
       name: 'AI Interviewer',
       description: 'Practice interviews with AI'
     },
     {
       id: 2,
       image: tool3,
-      link: 'https://ai-story-codekivy.netlify.app/',
+      link: 'https://aistory-codekivy.netlify.app/',
       name: 'AI Story Generator',
       description: 'Generate creative stories with AI'
     },
     {
       id: 3,
       image: tool2,
-      link: 'https://codereview-codekivy.netlify.app/',
+      link: 'https://aicodereview-codekivy.netlify.app/',
       name: 'Code Reviewer',
       description: 'Get AI-powered code reviews'
     }
@@ -260,4 +260,5 @@ const ToolButtons = () => {
 };
 
 export default ToolButtons;
+
 
