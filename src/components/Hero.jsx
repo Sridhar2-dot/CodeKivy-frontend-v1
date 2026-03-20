@@ -110,7 +110,7 @@ const Hero = () => {
           {/* Stats/Trust Indicators */}
           <div className="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">800+</div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">1000+</div>
               <div className="text-sm text-gray-400">Active Students</div>
             </div>
             <div className="text-center border-x border-gray-700">
