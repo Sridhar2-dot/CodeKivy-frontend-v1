@@ -127,7 +127,7 @@ const About = () => {
     const duration = 2000;
     const steps = 60;
     const increment = {
-      students: 800 / steps,
+      students: 1000 / steps,
       institutes: 25 / steps,
       states: 4 / steps
     };
@@ -136,7 +136,7 @@ const About = () => {
     const timer = setInterval(() => {
       currentStep++;
       setCounters({
-        students: Math.min(Math.floor(increment.students * currentStep), 800),
+        students: Math.min(Math.floor(increment.students * currentStep), 1000),
         institutes: Math.min(Math.floor(increment.institutes * currentStep), 25),
         states: Math.min(Math.floor(increment.states * currentStep), 4)
       });
