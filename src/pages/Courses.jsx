@@ -118,7 +118,7 @@ const Courses = () => {
             {/* Stats Bar */}
             <div className="flex flex-wrap justify-center gap-8 mt-12">
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-500">800+</div>
+                <div className="text-3xl font-bold text-orange-500">1000+</div>
                 <div className="text-sm text-gray-500 mt-1">Active Students</div>
               </div>
               <div className="w-px bg-gray-800"></div>
@@ -318,7 +318,7 @@ const Courses = () => {
               Start Your Journey <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Today</span>
             </h2>
             <p className="text-xl text-gray-400 mb-10 leading-relaxed">
-              800+ students trusted Code Kivy to master Python and AI unlock your potential today.
+              1000+ students trusted Code Kivy to master Python and AI unlock your potential today.
             </p>
             
             
