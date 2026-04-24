@@ -115,7 +115,7 @@ const Courses = () => {
               </div>
               <div className="w-px bg-gray-800"></div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-500">3</div>
+                <div className="text-3xl font-bold text-orange-500">2</div>
                 <div className="text-sm text-gray-500 mt-1">Expert Courses</div>
               </div>
             </div>
