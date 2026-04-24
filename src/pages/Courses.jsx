@@ -19,6 +19,19 @@ const Courses = () => {
   const courses = [
     {
       id: 1,
+      title: 'Python Basic',
+      duration: '20 Days',
+      price: 499,
+      image: course1,
+      color: 'from-blue-500 to-cyan-500',
+      level: 'Beginner',
+      students: '200+',
+      about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions. Perfect for school students starting their coding journey.',
+      pdfUrl: pythonBasicPdf, // <-- CHANGED
+      registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdMIr3sUbDapsx7FWP6f147prEefoU55VAWmWNh4wQ_baBeow/viewform'
+    },
+    {
+      id: 2,
       title: 'Python Advance',
       duration: '40 Days',
       price: 999,
@@ -31,7 +44,7 @@ const Courses = () => {
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScEiwTe9NLWH0FaVE5--sz6qP_BXMQfg2g7aLDq91ClCQsT6Q/viewform'
     },
     {
-      id: 2,
+      id: 3,
       title: 'Machine Learning Internship',
       duration: '60 Days',
       price: 2999,
@@ -115,7 +128,7 @@ const Courses = () => {
               </div>
               <div className="w-px bg-gray-800"></div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-500">2</div>
+                <div className="text-3xl font-bold text-orange-500">3</div>
                 <div className="text-sm text-gray-500 mt-1">Expert Courses</div>
               </div>
             </div>
