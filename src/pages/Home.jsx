@@ -4,6 +4,7 @@ import Hero from '../components/Hero';
 import Features from '../components/Features';
 import FeaturedCourses from '../components/FeaturedCourses';
 import ToolButtons from '../components/ToolButtons';
+import GameCards from '../components/GameCards';
 import HowItWorks from '../components/HowItWorks';
 import ChatWindow from '../components/ChatWindow';
 import { VoiceAgentOverlay } from '../components/VoiceAgentOverlay'; // 1. Import new voice component
@@ -53,6 +54,7 @@ function Home() {
       <Hero />
       <FeaturedCourses />
       <ToolButtons />
+      <GameCards />
       <Features />
       <HowItWorks />
 
