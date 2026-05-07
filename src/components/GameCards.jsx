@@ -17,21 +17,24 @@ const GameCards = () => {
       image: game1,
       link: '#',
       name: 'Arcade Zone',
-      description: 'Classic arcade games reimagined'
+      description: 'Classic arcade games reimagined',
+      comingSoon: false
     },
     {
       id: 2,
       image: game2,
       link: '#',
       name: 'Console Arena',
-      description: 'Console gaming experience'
+      description: 'Console gaming experience',
+      comingSoon: true
     },
     {
       id: 3,
       image: game3,
       link: '#',
       name: 'PC Battleground',
-      description: 'PC gaming at its finest'
+      description: 'PC gaming at its finest',
+      comingSoon: true
     }
   ];
 
@@ -75,9 +78,9 @@ const GameCards = () => {
                 key={game.id}
                 className="group relative animate-[slideUp_0.8s_ease-out_both] cursor-pointer block"
                 style={{ animationDelay: `${0.2 + index * 0.15}s` }}
-                onMouseEnter={() => setHoveredGame(game.id)}
+                onMouseEnter={() => !game.comingSoon && setHoveredGame(game.id)}
                 onMouseLeave={() => setHoveredGame(null)}
-                onClick={() => setSelectedGame(game)}
+                onClick={() => !game.comingSoon && setSelectedGame(game)}
               >
                 {/* Floating Animation Wrapper */}
                 <div
@@ -135,7 +138,9 @@ const GameCards = () => {
                           className="w-full h-full object-contain transition-all duration-700 drop-shadow-2xl"
                           style={{
                             transform: isHovered ? 'scale(1.15) rotate(2deg)' : 'scale(1) rotate(0deg)',
-                            filter: isHovered ? 'brightness(1.2) contrast(1.1)' : 'brightness(1) contrast(1)',
+                            filter: game.comingSoon
+                              ? 'blur(6px) brightness(0.5)'
+                              : isHovered ? 'brightness(1.2) contrast(1.1)' : 'brightness(1) contrast(1)',
                           }}
                           onError={(e) => {
                             e.target.style.display = 'none';
@@ -150,6 +155,15 @@ const GameCards = () => {
                       >
                         {game.name}
                       </div>
+
+                      {/* Coming Soon Overlay */}
+                      {game.comingSoon && (
+                        <div className="absolute inset-0 flex items-center justify-center z-20">
+                          <div className="px-6 py-3 rounded-xl bg-black/60 backdrop-blur-sm border border-orange-500/40">
+                            <span className="text-xl font-bold text-orange-400 tracking-wider">Coming Soon</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Click Button/CTA - Always visible */}
@@ -157,28 +171,35 @@ const GameCards = () => {
                       <div
                         className="group/btn relative flex items-center justify-center gap-2 w-full rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 overflow-hidden"
                         style={{
-                          backgroundColor: isHovered ? 'rgba(249, 115, 22, 0.95)' : 'rgba(249, 115, 22, 0.8)',
-                          transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
-                          boxShadow: isHovered
+                          backgroundColor: game.comingSoon
+                            ? 'rgba(100, 100, 100, 0.6)'
+                            : isHovered ? 'rgba(249, 115, 22, 0.95)' : 'rgba(249, 115, 22, 0.8)',
+                          transform: isHovered && !game.comingSoon ? 'translateY(-2px)' : 'translateY(0)',
+                          boxShadow: isHovered && !game.comingSoon
                             ? '0 10px 20px -5px rgba(249, 115, 22, 0.6)'
                             : '0 5px 15px -5px rgba(249, 115, 22, 0.4)',
+                          cursor: game.comingSoon ? 'not-allowed' : 'pointer',
                         }}
                       >
                         <span className="relative z-10 flex items-center gap-2">
-                          {isHovered ? 'Play Now' : 'Click to Play'}
-                          {isHovered ? (
+                          {game.comingSoon
+                            ? 'Coming Soon'
+                            : isHovered ? 'Play Now' : 'Click to Play'}
+                          {!game.comingSoon && (isHovered ? (
                             <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
                           ) : (
                             <ArrowRight className="h-4 w-4 transition-transform duration-300" />
-                          )}
+                          ))}
                         </span>
                         {/* Shine effect on button */}
-                        <div
-                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full transition-transform duration-1000"
-                          style={{
-                            transform: isHovered ? 'translateX(100%)' : 'translateX(-100%)',
-                          }}
-                        ></div>
+                        {!game.comingSoon && (
+                          <div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full transition-transform duration-1000"
+                            style={{
+                              transform: isHovered ? 'translateX(100%)' : 'translateX(-100%)',
+                            }}
+                          ></div>
+                        )}
                       </div>
                     </div>
 
