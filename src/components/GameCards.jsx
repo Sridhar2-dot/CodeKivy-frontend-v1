@@ -60,7 +60,7 @@ const GameCards = () => {
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
-              Games
+              Need a break?
             </span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
