@@ -24,7 +24,7 @@ const GameCards = () => {
       id: 2,
       image: game2,
       link: '#',
-      name: 'Console Arena',
+      name: 'Game-2',
       description: 'Console gaming experience',
       comingSoon: true
     },
@@ -32,7 +32,7 @@ const GameCards = () => {
       id: 3,
       image: game3,
       link: '#',
-      name: 'PC Battleground',
+      name: 'Game-3',
       description: 'PC gaming at its finest',
       comingSoon: true
     }
