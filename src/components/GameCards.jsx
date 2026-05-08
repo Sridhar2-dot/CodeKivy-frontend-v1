@@ -3,7 +3,7 @@ import { ArrowRight, ExternalLink, Gamepad2 } from 'lucide-react';
 import { ToolModal } from './ToolModal';
 
 // Import game images
-import game1 from '../assets/game_img1.png';
+import game1 from '../assets/game1.png';
 import game2 from '../assets/game_img2.png';
 import game3 from '../assets/game_img3.png';
 
