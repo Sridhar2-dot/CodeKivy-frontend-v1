@@ -16,7 +16,7 @@ const GameCards = () => {
       id: 1,
       image: game1,
       link: '#',
-      name: 'Arcade Zone',
+      name: 'Code-Runner',
       description: 'Classic arcade games reimagined',
       comingSoon: false
     },
