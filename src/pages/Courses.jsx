@@ -19,15 +19,14 @@ const Courses = () => {
   const courses = [
     {
       id: 1,
-      title: 'Python Basic',
-      duration: '20 Days',
-      price: 499,
+      title: 'Python + ML',
+      duration: '90 Days',
+      price: 3999,
       image: course1,
       color: 'from-blue-500 to-cyan-500',
       level: 'Beginner',
-      students: '200+',
-      about: 'Master the fundamentals of Python programming. Learn variables, data types, loops, functions. Perfect for school students starting their coding journey.',
-      pdfUrl: pythonBasicPdf, // <-- CHANGED
+      students: '400+',
+      about: 'Master the fundamentals of Python programming and Machine Learning. Learn variables, data types, loops, functions, data analysis, algorithms, and AI basics. Perfect for students starting their coding and AI journey.',      pdfUrl: pythonBasicPdf, // <-- CHANGED
       registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdMIr3sUbDapsx7FWP6f147prEefoU55VAWmWNh4wQ_baBeow/viewform'
     },
     {
@@ -50,7 +49,7 @@ const Courses = () => {
       price: 2999,
       image: course3,
       color: 'from-orange-500 to-red-500',
-      level: 'Advanced',
+      level: 'Beginner',
       students: '120+',
       about: 'Become a Machine Learning expert. Learn algorithms, neural networks, deep learning, and AI applications. Work on real industry projects and build your ML portfolio.',
       pdfUrl: mlInternPdf, // <-- CHANGED
