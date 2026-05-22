@@ -19,7 +19,7 @@ const Courses = () => {
   const courses = [
     {
       id: 1,
-      title: 'Python + ML',
+      title: 'Python + Machine Learning',
       duration: '90 Days',
       price: 3999,
       image: course1,
@@ -44,7 +44,7 @@ const Courses = () => {
     },
     {
       id: 3,
-      title: 'Machine Learning Internship',
+      title: 'Machine Learning',
       duration: '60 Days',
       price: 2999,
       image: course3,
