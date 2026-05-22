@@ -6,9 +6,9 @@ import course3 from '../assets/Generated Image November 05, 2025 - 1_50AM.png'
 import { Link } from 'react-router-dom';
 
 // ----- ADDED IMPORTS -----
-import pythonBasicPdf from '../assets/PythonBasic.pdf';
-import pythonAdvancePdf from '../assets/PythonAdvance.pdf';
-import mlInternPdf from '../assets/ML-Intern.pdf';
+import pythonBasicPdf from '../assets/Python_ML_Syllabus_Tight.pdf';
+import pythonAdvancePdf from '../assets/Part_1_Python_Advance_Syllabus.pdf';
+import mlInternPdf from '../assets/Part_2_Machine_Learning_Syllabus.pdf';
 // -------------------------
 
 const Courses = () => {
