@@ -27,7 +27,7 @@ const Courses = () => {
       level: 'Beginner',
       students: '400+',
       about: 'Master the fundamentals of Python programming and Machine Learning. Learn variables, data types, loops, functions, data analysis, algorithms, and AI basics. Perfect for students starting their coding and AI journey.',      pdfUrl: pythonBasicPdf, // <-- CHANGED
-      registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdMIr3sUbDapsx7FWP6f147prEefoU55VAWmWNh4wQ_baBeow/viewform'
+      registerUrl: 'https://rzp.io/rzp/pythonandml'
     },
     {
       id: 2,
@@ -40,7 +40,7 @@ const Courses = () => {
       students: '500+',
       about: 'Master Python programming Completely. Learn variables, data types, loops, functions and OOPs concepts. Perfect for beginners starting their coding journey.',
       pdfUrl: pythonAdvancePdf, // <-- CHANGED
-      registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScEiwTe9NLWH0FaVE5--sz6qP_BXMQfg2g7aLDq91ClCQsT6Q/viewform'
+      registerUrl: 'https://rzp.io/rzp/pythonadv'
     },
     {
       id: 3,
@@ -53,7 +53,7 @@ const Courses = () => {
       students: '120+',
       about: 'Become a Machine Learning expert. Learn algorithms, neural networks, deep learning, and AI applications. Work on real industry projects and build your ML portfolio.',
       pdfUrl: mlInternPdf, // <-- CHANGED
-      registerUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdXTXnMbHC1vXqFSYIn0gSBlX3jx-R9kr8rZqiYTv8CAOfstA/viewform'
+      registerUrl: 'https://rzp.io/rzp/mlcou'
     }
   ];
 
