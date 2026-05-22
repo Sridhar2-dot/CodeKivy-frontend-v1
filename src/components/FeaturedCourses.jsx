@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Clock, BarChart3, ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
-import course1 from '../assets/Generated Image November 05, 2025 - 1_41AM.png'
+import course1 from '../assets/1680288249805.png'
 import course2 from '../assets/Generated Image November 05, 2025 - 1_48AM.png'
 import course3 from '../assets/Generated Image November 05, 2025 - 1_50AM.png'
 
@@ -20,13 +20,13 @@ const courseImages = {
 const courses = [
   {
     id: 1,
-    title: 'Python Basic',
+    title: 'Python + Machine Learning',
     level: 'Beginner',
-    duration: '20 Days',
+    duration: '90 Days',
     href: 'courses',
     image: courseImages.pythonBasics,
-    description: 'Easy to learn, fun to code, and the best first step for school students exploring the world of programming.',
-    students: '200+',
+    description: 'Easy to learn, fun to code, and the best first step for students exploring the world of programming and AI.',
+    students: '400+',
     rating: 4.9,
   },
   {
