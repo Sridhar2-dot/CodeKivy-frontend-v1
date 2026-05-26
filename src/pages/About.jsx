@@ -351,8 +351,8 @@ const About = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed animate-[fadeInUp_1s_ease-out_0.2s_both]">
-              Empowering South India’s next generation of developers with
-              <span className="text-orange-500 font-semibold"> Python and AI excellence</span> across South India
+              Empowering India’s next generation of developers with
+              <span className="text-orange-500 font-semibold"> Python and AI excellence</span> across India
             </p>
           </div>
 
@@ -498,7 +498,7 @@ const About = () => {
               Our Events
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Bringing tech education to campuses across South India
+              Bringing tech education to campuses across India
             </p>
           </div>
 
@@ -641,7 +641,7 @@ const About = () => {
               Our Geographic Reach
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8 animate-[fadeInUp_1s_ease-out_0.2s_both]">
-              Serving students across 4 major states in South India
+              Serving students across 4 major states in India
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 mb-16">
@@ -704,7 +704,7 @@ const About = () => {
               See Code Kivy in Action
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Watch how we're transforming education across South India
+              Watch how we're transforming education across India
             </p>
           </div>
 
@@ -860,7 +860,7 @@ const About = () => {
                 <span className="ml-2 text-sm">Bangalore</span>
               </p>
               <p className="text-xl text-gray-300 leading-relaxed">
-                "Our mission is to empower every student with the skills and confidence to build their future in AI, while making quality tech education accessible across South India."             </p>
+                "Our mission is to empower every student with the skills and confidence to build their future in AI, while making quality tech education accessible across India."             </p>
             </div>
           </div>
         </div>
