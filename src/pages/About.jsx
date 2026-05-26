@@ -450,7 +450,7 @@ const About = () => {
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto animate-[fadeInUp_1s_ease-out_0.2s_both]">
               To democratize quality programming education and create a thriving community
-              of Python and AI developers across South India
+              of Python and AI developers across India
             </p>
           </div>
 
